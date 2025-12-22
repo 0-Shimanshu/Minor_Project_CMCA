@@ -1,0 +1,1809 @@
+You are GitHub Copilot acting as a senior full-stack software engineer.
+
+This entire document is ONE continuous instruction set.
+Do NOT reset context at any point.
+Do NOT reinterpret intent.
+Do NOT simplify requirements.
+
+You are required to generate a COMPLETE, WORKING, FULL-STACK WEB APPLICATION
+named:
+
+"CAMPUS MANAGEMENT ASSISTANT BOT"
+
+This is a college minor project, but it must follow real-world engineering
+discipline, correctness, and stability.
+
+Every rule below is FINAL and NON-NEGOTIABLE.
+
+1. PROJECT PURPOSE
+The project is a campus management website combined with an AI chatbot.
+
+The system provides:
+- Role-based access control
+- Public and private notices
+- FAQ workflow (ask → answer → publish)
+- File uploads (PDF and images)
+- Website scraping (admin only)
+- AI chatbot that answers questions using ONLY stored institutional data
+- Multilingual query handling through the AI model
+
+2. TECHNOLOGY STACK (LOCKED)
+
+Backend Framework: Flask (Python)
+Python Version: 3.10 or 3.11 ONLY
+
+Database: SQLite (local file-based)
+ORM: SQLAlchemy
+
+Authentication:
+- Session-based
+- No tokens
+- No JWT
+
+Frontend:
+- Server-rendered HTML (Jinja2)
+- Plain CSS
+- Minimal JavaScript (only for UI interaction)
+
+AI:
+- Google Gemini API
+- Pre-trained large language model
+- NO model training
+
+Server:
+- Flask built-in development server
+- Local execution only
+
+3. ABSOLUTE NON-GOALS (STRICTLY FORBIDDEN)
+You MUST NOT use or introduce:
+
+- FastAPI
+- Django
+- Node.js
+- MongoDB or any NoSQL DB
+- Vector databases
+- LangChain
+- LlamaIndex
+- Embeddings
+- Transformer training
+- OAuth or social login
+- Docker
+- Microservices
+- Client-side frameworks (React, Angular, Vue)
+
+Violation of this section is a FAILURE.
+
+4. CORE DESIGN PHILOSOPHY
+The system must be simple, explicit, and reliable.
+
+Rules:
+- Backend enforces ALL permissions
+- Frontend NEVER enforces permissions
+- Database controls visibility
+- AI controls understanding
+- No feature is added unless specified
+- No feature is removed
+
+5. USER ROLES (FINAL DEFINITIONS)
+The system has EXACTLY four roles:
+
+   1. GUEST
+   - No login
+   - Can view public notices only
+   - Can use guest chatbot (public data only)
+
+   2. STUDENT
+   - Registers and logs in
+   - login_id = FULL enrollment number
+   - Can view notices based on visibility rules
+   - Can ask FAQs
+   - Can view answered FAQs
+   - Can use student chatbot
+
+   3. MODERATOR
+   - Created by admin only
+   - login_id set manually by admin
+   - Has a sign_name for display
+   - Can create notices
+   - Can create and answer FAQs
+
+   4.  ADMIN
+   - Exists by default
+   - Full system access
+   - Manages users
+   - Manages notices and FAQs
+   - Controls scraper and logs
+
+6. CHATBOT CORE RULES (VERY IMPORTANT)
+The chatbot is NOT a search engine.
+
+Rules:
+- The chatbot NEVER performs keyword database search
+- The chatbot NEVER uses its own knowledge
+- The chatbot answers ONLY using provided context
+- If information is missing, it must say so
+
+Process:
+1. Backend fetches allowed content
+2. Content is injected into the prompt
+3. Gemini reasons over the content
+4. Response is returned in the SAME language as the user
+
+7. MULTILINGUAL HANDLING
+Do NOT manually translate user input.
+Do NOT detect language explicitly.
+
+The AI model handles language internally.
+
+The prompt MUST instruct:
+"Always answer in the same language as the user."
+
+8. DUPLICATE DATA PREVENTION (MANDATORY)
+All scraped text and PDF-derived content MUST be deduplicated.
+
+Method:
+- Normalize text
+- Generate SHA-256 hash
+- Store hash in database
+- If hash exists, skip insertion
+
+No duplicate chatbot knowledge is allowed.
+
+9. DEVELOPMENT STRATEGY (ORDER IS MANDATORY)
+The application MUST be built in this exact order:
+
+   1. Environment and virtual environment
+   2. Configuration and secrets
+   3. Folder and subfolder structure
+   4. Database models
+   5. Authentication system
+   6. Base UI layout
+   7. Core features (notices, FAQs)
+   8 . Chatbot integration
+   9. Scraper and deduplication
+   10. Email notifications (optional)
+
+10. GLOBAL ERROR HANDLING RULE
+All critical errors MUST:
+- Show a clear user-facing message
+- Be logged in system_logs
+- Avoid crashing the application
+
+11. PYTHON VERSION REQUIREMENT
+
+The project MUST use Python version 3.10 or 3.11.
+Python 3.12 or lower than 3.10 MUST NOT be used.
+
+All code generated MUST be compatible with Python 3.10+.
+No deprecated syntax is allowed.
+
+12. VIRTUAL ENVIRONMENT (MANDATORY)
+
+A Python virtual environment MUST be created inside the project root.
+
+Rules:
+- The virtual environment folder name MUST be exactly: venv
+- All dependencies MUST be installed inside this venv
+- No global Python packages may be used
+
+Expected commands (documented, not executed by Copilot):
+
+python -m venv venv
+
+Activation:
+- Windows: venv\Scripts\activate
+- Linux/Mac: source venv/bin/activate
+
+
+13. DEPENDENCY MANAGEMENT
+
+All dependencies MUST be listed in a file named: requirements.txt
+
+No dependency may be installed inline.
+No dependency may be assumed to exist.
+
+The requirements.txt file MUST contain EXACTLY the following packages:
+
+Flask
+Flask-SQLAlchemy
+Flask-Login
+python-dotenv
+requests
+beautifulsoup4
+pdfplumber
+google-generativeai
+
+No additional packages are allowed unless explicitly specified later.
+
+
+14. ENVIRONMENT VARIABLES (.env FILE)
+
+A file named ".env" MUST exist at the project root.
+
+This file MUST NOT be committed to version control.
+
+The application MUST load all secrets from this file.
+
+Required variables:
+
+SECRET_KEY=some_random_string
+GEMINI_API_KEY=your_gemini_api_key
+
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_USER=example@acropolis.in
+EMAIL_PASSWORD=your_email_password
+
+15. CONFIGURATION FILE (app/config.py)
+
+A file named app/config.py MUST exist.
+
+This file is responsible ONLY for application configuration.
+
+Rules:
+- No routes
+- No database queries
+- No business logic
+- No AI logic
+
+The configuration file MUST:
+
+- Load environment variables using python-dotenv
+- Define SECRET_KEY
+- Define SQLALCHEMY_DATABASE_URI using SQLite
+- Define SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+16. SQLITE DATABASE LOCATION (STRICT)
+
+The SQLite database file MUST be located at:
+
+app/database/app.db
+
+Rules:
+- The database directory MUST exist before initialization
+- The database path MUST be constructed using absolute paths
+- Hardcoded relative paths are NOT allowed
+
+17. APPLICATION ENTRY POINT (run.py)
+
+A file named run.py MUST exist at the project root.
+
+Responsibilities of run.py:
+- Create the Flask app using an app factory
+- Start the Flask development server
+- No business logic is allowed here
+- No routes are allowed here
+
+18. GIT IGNORE RULES (.gitignore)
+
+A .gitignore file MUST exist.
+
+It MUST include at least:
+
+venv/
+.env
+__pycache__/
+*.pyc
+uploads/
+*.db
+
+These files and folders MUST NEVER be committed.
+
+19. FIRST VALIDATION CHECKPOINT (CRITICAL)
+
+Before generating ANY application logic:
+
+The following MUST be true:
+- Flask app starts without error
+- Virtual environment is active
+- Database file is created successfully
+- No routes are required yet
+- No templates are required yet
+
+If this checkpoint is not satisfied,
+DO NOT proceed to the next steps.
+
+20. GLOBAL SAFETY RULE
+
+At every stage of development:
+- Prefer explicit code over magic
+- Prefer clarity over brevity
+- Prefer correctness over optimization
+
+21. PROJECT ROOT STRUCTURE
+
+The project root directory MUST follow this exact structure:
+
+campus-management-assistant/
+│
+├── venv/
+├── app/
+├── .env
+├── .gitignore
+├── requirements.txt
+├── run.py
+├── README.md
+
+Rules:
+- No application logic is allowed at the root level
+- run.py is ONLY for starting the application
+- All backend logic MUST live inside the app/ directory
+
+22. APP DIRECTORY STRUCTURE (CORE APPLICATION)
+
+The app/ directory MUST contain the following subfolders and files:
+
+app/
+│
+├── __init__.py
+├── config.py
+├── extensions.py
+│
+├── models/
+├── routes/
+├── services/
+├── templates/
+├── static/
+├── uploads/
+├── database/
+
+23. app/__init__.py (APPLICATION FACTORY)
+
+Purpose:
+- Create the Flask application instance
+- Load configuration
+- Initialize extensions
+- Register blueprints
+
+Rules:
+- MUST implement the Flask app factory pattern
+- MUST NOT define routes
+- MUST NOT define models
+- MUST NOT contain business logic
+
+24. app/extensions.py (SHARED EXTENSIONS)
+
+Purpose:
+- Initialize shared objects used across the app
+
+This file MUST define:
+- db (SQLAlchemy instance)
+- login_manager (Flask-Login)
+
+Rules:
+- No routes
+- No configuration
+- No business logic
+
+25. MODELS DIRECTORY (DATABASE LAYER)
+
+Directory structure:
+
+app/models/
+│
+├── __init__.py
+├── user.py
+├── notice.py
+├── notice_category.py
+├── notice_file.py
+├── faq.py
+├── chatbot_document.py
+├── scraper.py
+├── logs.py
+
+Rules:
+- Each file defines ONE model or a closely related set of models
+- No HTTP logic
+- No service logic
+- Relationships are allowed
+- Schema MUST match the approved database design exactly
+
+26. ROUTES DIRECTORY (HTTP LAYER)
+
+Directory structure:
+
+app/routes/
+│
+├── __init__.py
+├── auth.py
+├── guest.py
+├── student.py
+├── moderator.py
+├── admin.py
+├── chatbot.py
+├── scraper.py
+
+Rules:
+- Routes handle HTTP requests only
+- Routes call service-layer functions
+- Routes MUST NOT perform database queries directly
+- Routes MUST NOT contain AI logic
+- Routes MUST NOT contain scraping or PDF parsing logic
+
+27. SERVICES DIRECTORY (BUSINESS LOGIC LAYER)
+
+Directory structure:
+
+app/services/
+│
+├── __init__.py
+├── notice_service.py
+├── faq_service.py
+├── chatbot_service.py
+├── scraper_service.py
+├── pdf_service.py
+├── email_service.py
+
+Rules:
+- ALL business logic MUST live here
+- This includes:
+  - Database queries
+  - Permission checks
+  - Visibility filtering
+  - Chatbot prompt construction
+  - Deduplication logic
+  - PDF text extraction
+  - Website scraping
+  - Email sending
+- Services MUST be reusable and testable
+- Services MUST NOT depend on HTTP request objects
+
+28. TEMPLATES DIRECTORY (SERVER-RENDERED UI)
+
+Directory structure:
+
+app/templates/
+│
+├── base.html
+│
+├── auth/
+│   ├── login.html
+│   └── register.html
+│
+├── guest/
+│   ├── home.html
+│   ├── notices.html
+│   └── chatbot.html
+│
+├── student/
+│   ├── dashboard.html
+│   ├── notices.html
+│   ├── faq.html
+│   └── chatbot.html
+│
+├── moderator/
+│   ├── dashboard.html
+│   ├── notices.html
+│   ├── notice_create.html
+│   ├── notice_edit.html
+│   ├── faq.html
+│   └── faq_answer.html
+│
+└── admin/
+    ├── dashboard.html
+    ├── users.html
+    ├── notices.html
+    ├── notice_create.html
+    ├── notice_edit.html
+    ├── faq.html
+    ├── scraper.html
+    └── logs.html
+Rules:
+
+base.html is the ONLY layout template
+
+All templates MUST extend base.html
+
+No database queries in templates
+
+Only simple loops and conditionals are allowed
+
+29. STATIC FILES DIRECTORY
+
+Directory structure:
+
+app/static/
+│
+├── css/
+│ ├── main.css
+│ ├── auth.css
+│ ├── dashboard.css
+│ └── chatbot.css
+│
+├── js/
+│ ├── chatbot.js
+│ ├── filters.js
+│ └── admin.js
+│
+└── images/
+└── logo.png
+
+Rules:
+
+CSS handles styling only
+
+JavaScript handles UI interaction only
+
+JavaScript MUST NOT enforce permissions
+
+JavaScript MUST NOT fetch sensitive data directly
+
+30.STATIC FILES DIRECTORY
+
+Directory structure:
+
+app/static/
+│
+├── css/
+│ ├── main.css
+│ ├── auth.css
+│ ├── dashboard.css
+│ └── chatbot.css
+│
+├── js/
+│ ├── chatbot.js
+│ ├── filters.js
+│ └── admin.js
+│
+└── images/
+└── logo.png
+
+Rules:
+
+CSS handles styling only
+
+JavaScript handles UI interaction only
+
+JavaScript MUST NOT enforce permissions
+
+JavaScript MUST NOT fetch sensitive data directly
+
+31.DATABASE DIRECTORY
+
+Directory structure:
+
+app/database/
+│
+└── app.db
+
+Rules:
+
+SQLite database file MUST exist here
+
+Directory MUST be created before database initialization
+
+32.ARCHITECTURAL GUARANTEES (DO NOT VIOLATE)
+
+Models do not depend on routes
+
+Routes do not know database internals
+
+Services do not know about HTTP
+
+Templates do not know about permissions
+
+JavaScript does not enforce business rules
+
+Any violation introduces bugs and is NOT allowed.
+
+33. DATABASE DESIGN PRINCIPLES
+
+The database schema is FINAL and MUST be implemented exactly.
+
+Rules:
+- SQLite is used as the database engine
+- SQLAlchemy ORM MUST be used
+- No extra tables are allowed
+- No missing tables are allowed
+- No column renaming is allowed
+- Schema must be normalized
+- Redundant data must NOT be duplicated
+
+34. USERS TABLE (AUTHORITY TABLE)
+
+Table name: users
+
+Purpose:
+Stores all system users:
+- admin
+- moderator
+- student
+
+There are NO separate tables per role.
+Roles are distinguished by a "role" column.
+
+Columns:
+id                  INTEGER PRIMARY KEY
+login_id            TEXT UNIQUE NOT NULL
+password_hash       TEXT NOT NULL
+
+role                TEXT NOT NULL
+                    Allowed values:
+                    'admin'
+                    'moderator'
+                    'student'
+
+enrollment_no       TEXT UNIQUE
+department          TEXT
+year                INTEGER
+
+sign_name           TEXT
+email               TEXT
+
+is_active           BOOLEAN DEFAULT TRUE
+created_at          DATETIME
+
+Rules:
+- login_id is used for authentication
+- For students, login_id = FULL enrollment number
+- For moderators, login_id is set by admin
+- Admin account exists by default
+- Passwords MUST be stored hashed
+
+35. NOTICE CATEGORIES TABLE
+
+Table name: notice_categories
+
+Purpose:
+Stores reusable categories for notices and FAQs.
+Columns:
+id      INTEGER PRIMARY KEY
+name    TEXT UNIQUE NOT NULL
+
+36. NOTICES TABLE (CORE CONTENT)
+
+Table name: notices
+
+Purpose:
+Stores all notices in the system.
+Columns:
+id                  INTEGER PRIMARY KEY
+title               TEXT NOT NULL
+summary             TEXT
+content             TEXT NOT NULL
+
+category_id          INTEGER NOT NULL
+                    FOREIGN KEY → notice_categories.id
+
+visibility           TEXT NOT NULL
+                    Allowed values:
+                    'public'
+                    'student'
+                    'restricted'
+
+status               TEXT NOT NULL
+                    Allowed values:
+                    'draft'
+                    'published'
+                    'archived'
+
+target_department    TEXT
+target_year          INTEGER
+
+created_by           INTEGER NOT NULL
+                    FOREIGN KEY → users.id
+
+created_at           DATETIME
+
+Visibility Rules:
+- public → visible to everyone
+- student → visible to all logged-in students
+- restricted → visible ONLY if:
+    student.department == target_department
+    AND
+    student.year == target_year
+
+37. NOTICE FILES TABLE (ATTACHMENTS)
+
+Table name: notice_files
+
+Purpose:
+Stores metadata for files attached to notices.
+Actual files are stored on disk.
+
+Columns:
+id          INTEGER PRIMARY KEY
+notice_id  INTEGER NOT NULL
+            FOREIGN KEY → notices.id
+
+file_name  TEXT NOT NULL
+file_path  TEXT NOT NULL
+file_type  TEXT
+            Allowed values:
+            'pdf'
+            'image'
+
+uploaded_at DATETIME
+
+38. FAQ TABLE (QUESTION WORKFLOW)
+
+Table name: faqs
+
+Purpose:
+Manages FAQ lifecycle:
+student asks → moderator/admin answers → published
+Columns:
+id                  INTEGER PRIMARY KEY
+question            TEXT NOT NULL
+answer              TEXT
+
+category             TEXT NOT NULL
+target_department    TEXT
+
+status               TEXT NOT NULL
+                    Allowed values:
+                    'pending'
+                    'answered'
+
+asked_by             INTEGER
+                    FOREIGN KEY → users.id
+
+answered_by          INTEGER
+                    FOREIGN KEY → users.id
+
+created_at           DATETIME
+answered_at          DATETIME
+
+Rules:
+- Pending FAQs are NOT visible to students
+- Only answered FAQs are visible to students
+- Students cannot edit FAQs after submission
+- Moderators/Admin manually mark FAQs as answered
+
+39. CHATBOT DOCUMENTS TABLE (AI KNOWLEDGE BASE)
+
+Table name: chatbot_documents
+
+Purpose:
+This is the ONLY table the chatbot is allowed to read.
+Columns:
+id              INTEGER PRIMARY KEY
+
+source_type     TEXT NOT NULL
+                Allowed values:
+                'notice'
+                'faq'
+                'pdf'
+                'scraped'
+
+source_id       INTEGER
+
+content         TEXT NOT NULL
+
+content_hash    TEXT UNIQUE NOT NULL
+
+visibility      TEXT NOT NULL
+                Allowed values:
+                'public'
+                'student'
+
+created_at      DATETIME
+Rules:
+- content_hash is generated using SHA-256 on normalized text
+- If content_hash already exists → DO NOT insert duplicate
+- Chatbot NEVER reads unpublished or unauthorized data
+
+40. SCRAPED WEBSITES TABLE
+
+Table name: scraped_websites
+
+Purpose:
+Stores admin-added websites for scraping.
+Columns:
+id       INTEGER PRIMARY KEY
+url      TEXT UNIQUE NOT NULL
+added_at DATETIME
+
+41. SCRAPE LOGS TABLE
+
+Table name: scrape_logs
+
+Purpose:
+Tracks scraping attempts and results.
+Columns:
+id                      INTEGER PRIMARY KEY
+website_id              INTEGER
+                        FOREIGN KEY → scraped_websites.id
+
+status                  TEXT
+                        Allowed values:
+                        'success'
+                        'failed'
+
+extracted_text_length   INTEGER
+pdf_links_found         INTEGER
+
+scraped_at              DATETIME
+
+42. EMAIL LOGS TABLE
+
+Table name: email_logs
+
+Purpose:
+Tracks email notifications sent by the system.
+Columns:
+id          INTEGER PRIMARY KEY
+notice_id  INTEGER
+            FOREIGN KEY → notices.id
+
+sent_by    INTEGER
+            FOREIGN KEY → users.id
+
+subject    TEXT
+sent_at    DATETIME
+
+43. SYSTEM LOGS TABLE
+
+Table name: system_logs
+
+Purpose:
+Tracks system events and errors.
+Columns:
+id          INTEGER PRIMARY KEY
+module      TEXT
+message     TEXT
+created_at  DATETIME
+
+44. DATABASE INITIALIZATION RULES
+
+- Tables MUST be created using SQLAlchemy
+- db.create_all() is allowed
+- No migrations are required
+- Database file must exist before app starts
+
+45. DATA SAFETY GUARANTEES
+
+- Deleting users does NOT delete historical data
+- Deactivated users cannot log in
+- Chatbot never accesses draft data
+- No cascade deletes without explicit intent
+46. AUTHENTICATION SYSTEM OVERVIEW
+
+The authentication system is session-based.
+
+Rules:
+- Use Flask-Login or equivalent session-based approach
+- Do NOT use JWT
+- Do NOT use OAuth
+- Do NOT use tokens
+- Authentication state is stored in server-side sessions
+
+47. PASSWORD STORAGE AND VERIFICATION
+
+Passwords MUST be hashed before storage.
+
+Rules:
+- Use werkzeug.security functions:
+    - generate_password_hash
+    - check_password_hash
+- Do NOT store plain text passwords
+- Do NOT use advanced or custom hashing frameworks
+- Hash comparison MUST be done using check_password_hash
+
+48. USER IDENTIFIER RULE (VERY IMPORTANT)
+
+login_id is the ONLY identifier used for authentication.
+
+Rules:
+- login_id for STUDENT = FULL enrollment number
+- No transformation
+- No truncation
+- No formatting change
+
+Example:
+Enrollment Number: 0827cs231244
+login_id: 0827cs231244
+
+Moderator:
+- login_id is manually set by admin
+
+Admin:
+- login_id is predefined
+
+49. STUDENT REGISTRATION FLOW
+
+Registration page is available ONLY to students.
+
+Registration form fields:
+- Full Name
+- Enrollment Number
+- Department
+- Year
+- Password
+
+On registration:
+- login_id = enrollment number
+- enrollment_no = enrollment number
+- role = 'student'
+- is_active = TRUE
+- password MUST be hashed before saving
+
+Students CANNOT:
+- Choose their login_id
+- Edit their profile after registration
+
+50. LOGIN FLOW (ALL ROLES)
+
+On login attempt:
+
+1. Fetch user by login_id
+2. If user does NOT exist → reject login
+3. If is_active == FALSE → reject with message
+4. Verify password using hash comparison
+5. Start authenticated session
+
+51. ROLE-BASED REDIRECTION AFTER LOGIN
+
+After successful login:
+
+If role == 'admin':
+    Redirect to /admin/dashboard
+
+If role == 'moderator':
+    Redirect to /moderator/dashboard
+
+If role == 'student':
+    Redirect to /student/dashboard
+52. LOGOUT FLOW
+
+On logout:
+- Clear session
+- End authentication
+- Redirect to guest home page
+
+53. USER DEACTIVATION BEHAVIOR
+
+Admin can deactivate users.
+
+When a user is deactivated:
+- is_active is set to FALSE
+- User cannot log in again
+- Existing sessions become invalid on next request
+- Historical data (notices, FAQs, logs) remains intact
+
+54. ROUTE PROTECTION RULES
+
+Every protected route MUST:
+- Check if user is authenticated
+- Verify role authorization
+
+Unauthorized behavior:
+- Redirect to login page
+- Show clear error message
+
+55. ROLE ACCESS GUARANTEES
+
+Access rules:
+- Guest CANNOT access student routes
+- Student CANNOT access moderator routes
+- Moderator CANNOT access admin routes
+- Admin CAN access all routes
+
+56. DEFAULT ADMIN CREATION (FIRST APPLICATION START)
+
+On first application start:
+
+If no admin user exists:
+- Create default admin user
+- Credentials may be loaded from .env OR hardcoded once
+- This is acceptable for a college project
+
+57. AUTHENTICATION ERROR HANDLING
+
+All authentication-related errors MUST:
+- Show clear, user-friendly messages
+- Be logged into system_logs table
+- NOT expose stack traces to users
+
+57. AUTHENTICATION ERROR HANDLING
+
+All authentication-related errors MUST:
+- Show clear, user-friendly messages
+- Be logged into system_logs table
+- NOT expose stack traces to users
+
+58. GLOBAL UI PRINCIPLES
+
+The user interface MUST follow these principles:
+
+- Desktop-first design
+- Professional and academic appearance
+- No flashy or bright colors
+- Consistent theme across all roles
+- Muted blues, greys, and white content cards
+- Clear typography and spacing
+
+All pages MUST extend base.html.
+No page may exist without inheriting base.html.
+
+59. BASE LAYOUT (base.html)
+
+base.html MUST define:
+
+- Header:
+    - Website name on the left
+    - Role-aware navigation on the right
+
+- Main content block:
+    - Where child templates render content
+
+- Footer:
+    - Minimal, informational only
+
+Navigation items by role:
+
+Guest:
+- Login
+- Register
+
+Student:
+- Dashboard
+- Notices
+- FAQs
+- Chatbot
+- Logout
+
+Moderator:
+- Dashboard
+- Notices
+- FAQs
+- Logout
+
+Admin:
+- Dashboard
+- Users
+- Notices
+- FAQs
+- Scraper
+- Logs
+- Logout
+
+60. GUEST USER INTERFACE
+
+Guest users do NOT log in.
+
+Guest Home Page (guest/home.html):
+
+- This is the default landing page
+- Shows brief site description
+- Button: "View Public Notices"
+- Button: "Open Chatbot"
+
+61. GUEST NOTICES PAGE (guest/notices.html)
+
+This page displays ONLY notices where:
+
+- visibility = 'public'
+- status = 'published'
+
+Each notice card shows:
+- Title
+- Short summary
+
+Clicking a notice opens a detail view that shows:
+- Full notice content
+- Attached files (PDF or image)
+- Download / open links
+
+Rules:
+- Do NOT show "posted by" information
+- Do NOT show internal metadata
+
+62. GUEST CHATBOT PAGE (guest/chatbot.html)
+
+The guest chatbot MUST:
+
+- Use ONLY chatbot_documents where visibility = 'public'
+- Have no memory between messages
+
+UI elements:
+- Chat message area
+- Input text box
+- Send button
+
+Behavior:
+- Each query is handled independently
+- No history persistence
+
+63. STUDENT DASHBOARD (student/dashboard.html)
+
+The student dashboard is READ-ONLY.
+
+It displays:
+- List of today's notices (filtered by visibility rules)
+- List of today's answered FAQs
+- List of FAQs asked by the student with status:
+    - pending
+    - answered
+
+If a FAQ is answered:
+- Clicking it opens the full question and answer
+
+Students cannot edit or delete any content here.
+
+64. STUDENT NOTICES PAGE (student/notices.html)
+
+This page displays notices where:
+
+- visibility = 'public'
+OR
+- visibility = 'student'
+OR
+- visibility = 'restricted' AND
+  student.department == notice.target_department AND
+  student.year == notice.target_year
+
+Filtering:
+- Category dropdown filter only
+
+Each notice:
+- Opens a detail view
+- Shows full content and attachments
+
+65. STUDENT FAQ PAGE (student/faq.html)
+
+This page displays ONLY answered FAQs.
+
+Features:
+- Category filter
+- Simple text search (title/content match)
+
+Button:
+- "Ask a Question"
+
+66. STUDENT ASK FAQ FORM
+
+Form fields:
+- Question (textarea)
+- Category (dropdown)
+- Target Department (dropdown)
+
+On submit:
+- status = 'pending'
+- asked_by = current student
+- Students CANNOT edit the question after submission
+
+67. STUDENT CHATBOT PAGE (student/chatbot.html)
+
+Student chatbot MUST use chatbot_documents where:
+
+- visibility = 'public'
+- visibility = 'student'
+
+Rules:
+- No department or year filtering inside chatbot
+- Chatbot does NOT expose source metadata unless explicitly asked
+
+68. MODERATOR DASHBOARD (moderator/dashboard.html)
+
+The moderator dashboard displays ONLY:
+
+- Notices created by the logged-in moderator
+- FAQs answered by the logged-in moderator
+
+No global statistics are shown.
+
+69. MODERATOR NOTICES PAGE (moderator/notices.html)
+
+Moderators can:
+- View their own notices
+- Create new notices
+- Edit their own notices
+- Delete their own notices
+
+70. MODERATOR CREATE / EDIT NOTICE
+
+Form fields:
+- Title
+- Summary
+- Content
+- Category
+- Visibility
+- Target Department (only if visibility = restricted)
+- Target Year (only if visibility = restricted)
+- File uploads (PDF or image)
+
+On publish:
+- status = 'published'
+- Corresponding chatbot_document entry MUST be created
+
+71. MODERATOR FAQ PAGE (moderator/faq.html)
+
+This page displays:
+- Pending FAQs (filtered by target department)
+- FAQs created or answered by the moderator
+
+Moderators can:
+- Answer pending FAQs
+- Create FAQs directly
+
+72. MODERATOR ANSWER FAQ PAGE (moderator/faq_answer.html)
+
+Moderator actions:
+- Write answer
+- Mark FAQ as 'answered'
+
+Effects:
+- FAQ becomes visible to students
+- chatbot_document entry MUST be created
+
+73. ADMIN DASHBOARD (admin/dashboard.html)
+
+Admin dashboard displays:
+- Recently published notices (all)
+- Recently answered FAQs (all)
+- Recent email notifications sent
+
+74. ADMIN USER MANAGEMENT PAGE (admin/users.html)
+
+Admin can:
+- View student list
+- View moderator list
+- Search students by enrollment number
+- Search moderators by login_id
+- Deactivate users
+
+75. ADMIN NOTICES PAGE (admin/notices.html)
+
+Admin can:
+- View all notices
+- Create notices
+- Edit any notice
+- Delete notices
+
+76. ADMIN FAQ PAGE (admin/faq.html)
+
+Admin can:
+- Create FAQs
+- Edit any FAQ
+- Answer pending FAQs
+
+77. ADMIN SCRAPER PAGE (admin/scraper.html)
+
+Admin can:
+- Add website URLs to scrape
+- Trigger scraping manually
+- View scrape logs
+- View scraped PDFs
+
+Admin can publish scraped PDFs as notices.
+
+78. ADMIN LOGS PAGE (admin/logs.html)
+
+This page displays:
+- system_logs
+- email_logs
+
+79. UI ERROR HANDLING
+
+All UI-level errors MUST:
+- Display clear, user-friendly messages
+- Avoid exposing stack traces
+- Be logged to system_logs
+
+80. UI GUARANTEES
+
+- No empty pages
+- All pages have clear purpose
+- All forms validate input
+- Destructive actions require confirmation
+
+81. SERVICE LAYER PRINCIPLES (MANDATORY)
+
+All non-trivial logic MUST be implemented in the service layer.
+
+Rules:
+- Routes MUST call services
+- Routes MUST NOT directly query the database
+- Services MUST NOT depend on HTTP request objects
+- Services MUST return plain Python objects or primitives
+- Services MUST enforce permission and visibility rules
+
+82. NOTICE SERVICE (notice_service.py)
+
+This service manages the complete lifecycle of notices.
+
+Responsibilities:
+- Create notices
+- Update notices
+- Delete notices
+- Fetch notices by visibility rules
+- Attach files to notices
+- Create chatbot_documents for published notices
+
+Notice creation rules:
+- Only moderator or admin can create notices
+- status defaults to 'draft' until published
+- On publish:
+    - status is set to 'published'
+    - visibility rules are enforced
+    - chatbot_documents entry MUST be created
+
+Notice visibility logic (must be enforced here):
+
+If visibility == 'public':
+    Visible to everyone
+
+If visibility == 'student':
+    Visible to all authenticated students
+
+If visibility == 'restricted':
+    Visible ONLY if:
+        student.department == notice.target_department
+        AND
+        student.year == notice.target_year
+
+83. NOTICE FILE HANDLING (notice_service.py + pdf_service.py)
+
+Rules:
+- Files are uploaded to app/uploads/notices/
+- Database stores file path only
+- Allowed file types:
+    - PDF
+    - Image
+
+PDF handling:
+- Extract text using pdfplumber
+- Normalize extracted text
+- Generate content_hash
+- Store summary text into chatbot_documents
+
+If PDF text extraction fails:
+- Skip chatbot insertion
+- Log error to system_logs
+
+84. FAQ SERVICE (faq_service.py)
+
+Responsibilities:
+- Create FAQ (student, moderator, admin)
+- Fetch answered FAQs
+- Fetch pending FAQs (moderator/admin)
+- Answer FAQs
+- Enforce FAQ visibility rules
+FAQ lifecycle:
+1. Student submits question → status = 'pending'
+2. Moderator/Admin answers → status = 'answered'
+3. FAQ becomes visible to students
+4. chatbot_documents entry MUST be created
+
+Rules:
+- Pending FAQs are NEVER visible to students
+- Students cannot edit or delete FAQs
+- Moderators/Admin can edit answers
+
+85. CHATBOT SERVICE (chatbot_service.py)
+
+This service handles ALL chatbot logic.
+
+The chatbot MUST NOT:
+- Query the database dynamically
+- Perform keyword search
+- Access unauthorized data
+
+Chatbot input flow:
+1. Identify user role (guest or student)
+2. Fetch chatbot_documents based on visibility:
+    - guest → visibility = 'public'
+    - student → visibility IN ('public', 'student')
+3. Concatenate documents into a structured context block
+4. Inject context into Gemini prompt
+5. Send user query + context to Gemini API
+6. Return model response
+
+Chatbot prompt rules:
+- Instruct model to answer ONLY from provided context
+- If answer is not found → say so explicitly
+- Always reply in the same language as the user
+- Do NOT hallucinate
+
+86. CHATBOT DOCUMENT DEDUPLICATION
+
+Deduplication MUST be enforced in chatbot_service or a shared utility.
+
+Rules:
+- Normalize text (lowercase, strip whitespace)
+- Generate SHA-256 hash
+- Check existing content_hash
+- If exists → DO NOT insert
+- If new → insert with correct visibility
+
+87. SCRAPER SERVICE (scraper_service.py)
+
+Responsibilities:
+- Fetch HTML from admin-provided URLs
+- Extract visible text content
+- Detect linked PDFs
+- Save scrape results
+- Store scrape logs
+Scraping rules:
+- Only admin can trigger scraping
+- Scraped text is tagged as visibility = 'public'
+- Extracted text is summarized (optional)
+- Deduplication MUST be applied before insertion
+
+88. SCRAPED PDF HANDLING
+
+Rules:
+- Download PDFs to app/uploads/scraped/
+- Extract text using pdfplumber
+- Generate content_hash
+- Insert into chatbot_documents if not duplicate
+- Admin can manually publish scraped PDFs as notices
+
+89. EMAIL SERVICE (email_service.py)
+
+Responsibilities:
+- Send email notifications on notice publish
+- Log sent emails to email_logs table
+Email rules:
+- Email notifications are mandatory for students
+- No opt-out
+- Email includes:
+    - Notice title
+    - Short summary
+    - Link to notice page
+- Attachments may be included if supported
+- Failures are logged but do NOT block publishing
+
+90. SYSTEM LOGGING (logs.py)
+
+All critical events MUST be logged:
+
+Examples:
+- Login failures
+- PDF extraction errors
+- Scraper failures
+- Email send failures
+- Permission violations
+
+Logs are written to system_logs table.
+
+91. SERVICE GUARANTEES
+
+- Services enforce ALL business rules
+- Routes remain thin
+- Templates remain passive
+- JavaScript remains UI-only
+
+92. ROUTES AND BLUEPRINT ARCHITECTURE
+
+All routes MUST be implemented using Flask Blueprints.
+
+Each role has its own blueprint file.
+
+Blueprint files:
+- auth.py
+- guest.py
+- student.py
+- moderator.py
+- admin.py
+- chatbot.py
+- scraper.py
+
+Rules:
+- Routes handle HTTP requests only
+- Routes MUST NOT contain business logic
+- Routes MUST NOT contain database queries
+- Routes MUST call service-layer functions
+- Routes MUST enforce authentication and role checks
+
+93. ROUTE ACCESS CONTROL (MANDATORY)
+
+Every route MUST explicitly enforce access rules.
+
+Rules:
+- Guest routes require NO authentication
+- Student routes require role == 'student'
+- Moderator routes require role == 'moderator'
+- Admin routes require role == 'admin'
+
+If access is violated:
+- Redirect to login page
+- Log event in system_logs
+- Show user-friendly error message
+
+94. AUTH ROUTES (auth.py)
+
+Routes:
+- /login
+- /register
+- /logout
+
+Rules:
+- Registration allowed ONLY for students
+- Login uses login_id and password
+- Logout clears session
+- Auth routes MUST NOT access models directly
+
+95. GUEST ROUTES (guest.py)
+
+Routes:
+- /
+- /notices
+- /chatbot
+
+Rules:
+- Only public notices are fetched
+- Chatbot uses public chatbot_documents only
+
+96. STUDENT ROUTES (student.py)
+
+Routes:
+- /student/dashboard
+- /student/notices
+- /student/faq
+- /student/chatbot
+
+Rules:
+- Visibility filtering MUST be applied via services
+- Student cannot access unpublished or restricted content incorrectly
+
+97. MODERATOR ROUTES (moderator.py)
+
+Routes:
+- /moderator/dashboard
+- /moderator/notices
+- /moderator/notice/create
+- /moderator/notice/edit/<id>
+- /moderator/faq
+- /moderator/faq/answer/<id>
+
+Rules:
+- Moderators can access ONLY their own notices
+- Moderators can answer FAQs but cannot manage users
+
+98. ADMIN ROUTES (admin.py)
+
+Routes:
+- /admin/dashboard
+- /admin/users
+- /admin/notices
+- /admin/faq
+- /admin/scraper
+- /admin/logs
+
+Rules:
+- Admin has unrestricted access
+- Admin can deactivate users
+- Admin can publish scraped content
+
+99. CHATBOT ROUTES (chatbot.py)
+
+Route:
+- /chatbot/query
+
+Rules:
+- Accepts POST requests only
+- Receives user query
+- Calls chatbot_service
+- Returns AI response
+- Does NOT store conversation history
+
+100. CHATBOT PROMPT ENGINEERING (CRITICAL)
+
+The chatbot prompt MUST be constructed EXACTLY as follows:
+
+System Instruction:
+"You are a campus assistant AI. Answer ONLY using the provided context.
+If the answer is not in the context, say you do not have that information.
+Always respond in the same language as the user."
+
+Context Block:
+- Concatenated chatbot_documents content
+- Each document separated clearly
+- No metadata leakage
+
+User Query:
+- Passed as-is
+- No preprocessing
+
+101. MULTILINGUAL HANDLING (FINAL RULE)
+
+Do NOT translate queries manually.
+Do NOT detect language programmatically.
+
+The Gemini model handles multilingual reasoning internally.
+
+Always instruct:
+"Respond in the same language as the user."
+
+102. CHATBOT FAILURE HANDLING
+
+If:
+- No relevant context exists
+- Gemini API fails
+- Timeout occurs
+
+Then:
+- Return a graceful error message
+- Log error in system_logs
+- Do NOT crash application
+
+103. BUILD ORDER FOR COPILOT (VERY IMPORTANT)
+
+Copilot MUST generate code in this EXACT order:
+
+1. Create project root and folders
+2. Create virtual environment
+3. Create requirements.txt
+4. Create .env and config.py
+5. Create app factory and extensions
+6. Create database models
+7. Initialize database
+8. Create base.html
+9. Implement authentication routes
+10. Implement role dashboards
+11. Implement notices and FAQs
+12. Implement chatbot service
+13. Implement scraper
+14. Implement email service
+15. Perform final validation
+
+104. COPILOT GENERATION RULES
+
+Copilot MUST:
+- Generate one file at a time
+- Ensure imports are correct
+- Avoid placeholder logic
+- Avoid TODO comments
+- Avoid hallucinated features
+- Follow schema strictly
+
+105. VALIDATION CHECKLIST (FINAL)
+
+The project is considered COMPLETE only if:
+
+- App starts without error
+- All roles can log in correctly
+- Notices respect visibility rules
+- FAQs follow pending → answered workflow
+- Chatbot answers ONLY from stored data
+- Scraper avoids duplicates
+- Emails are logged
+- No unauthorized access possible
+
+106. FINAL GUARANTEE
+
+This instruction set is FINAL.
+
+No assumptions.
+No simplifications.
+No deviations.
+
+Generate the application EXACTLY as described.
+107. FILE STORAGE AND PATH HANDLING
+
+All uploaded files (PDFs, images) MUST be stored on disk.
+
+Rules:
+- Database stores ONLY file paths, never binary data
+- File paths MUST be relative to app/uploads/
+- File names MUST be sanitized before saving
+- If two files have the same name:
+    - Append a timestamp or UUID to avoid overwrite
+- Deleting a notice MUST also delete its files from disk
+- Deleting files MUST be handled safely with existence checks
+
+108. PDF TEXT EXTRACTION LIMITATIONS AND FALLBACK
+
+PDF text extraction uses pdfplumber.
+
+Rules:
+- Text-based PDFs are extracted normally
+- Image-only PDFs may fail extraction
+- If extraction returns empty or near-empty text:
+    - Skip chatbot_documents insertion
+    - Still allow PDF to be attached to notice
+    - Log warning to system_logs
+- NEVER crash due to PDF parsing errors
+
+109. SEARCH FUNCTIONALITY (NOT CHATBOT)
+
+Search bars in:
+- Notices page
+- FAQ page
+
+Rules:
+- Simple SQL LIKE queries are sufficient
+- Search is case-insensitive
+- Search is limited to:
+    - title
+    - summary
+    - question
+    - answer
+
+Full-text search engines are NOT required.
+SQLite default capabilities are sufficient.
+
+110. SCRAPER DUPLICATE HANDLING (IMPORTANT)
+
+When scraping websites:
+
+Rules:
+- Normalize extracted text
+- Generate SHA-256 content hash
+- If content_hash exists:
+    - Skip insertion
+    - Log as duplicate
+- Do NOT scrape the same URL concurrently
+- Scraper failures MUST NOT affect rest of system
+
+111. SCRAPED CONTENT VISIBILITY
+
+All scraped content defaults to:
+
+visibility = 'public'
+
+Rules:
+- Scraped content is NOT automatically a notice
+- Scraped PDFs/text are ONLY used for chatbot
+- Admin may manually convert scraped content into a notice
+
+112. DOWNLOAD LINKS AND FILE ACCESS
+
+When a user clicks a file link:
+
+Rules:
+- File is served through a Flask route
+- Direct filesystem exposure is NOT allowed
+- Route must verify:
+    - User authentication (if required)
+    - Notice visibility permissions
+- Example behavior:
+    /files/download/<file_id>
+
+113. EMAIL SYSTEM CONSTRAINTS
+
+Email notifications are SIMPLE by design.
+
+Rules:
+- Emails are sent only on notice publish
+- Students ALWAYS receive email (no opt-out)
+- Moderators may optionally see email logs
+- Email format:
+    - Plain text or simple HTML
+    - No complex templates
+    - No retries
+- Email failure MUST NOT block notice publishing
+
+114. PERFORMANCE AND SCALE ASSUMPTIONS
+
+This is a college demo project.
+
+Assumptions:
+- Low concurrent users
+- SQLite is sufficient
+- No horizontal scaling required
+- No background task queues required
+
+Optimizations beyond correctness are NOT required.
+
+115. DEBUGGING AND DEVELOPMENT RULES
+
+During development:
+
+Rules:
+- Use Flask debug mode locally
+- Print statements are allowed temporarily
+- Remove debug prints before final submission
+- Errors must be logged properly
+- The application must remain stable even on failure
+
+116. FINAL COPILOT BEHAVIOR CONSTRAINT
+
+When generating code, Copilot MUST:
+
+- Follow numbering logic strictly
+- Match database schema exactly
+- Not invent new fields, tables, or roles
+- Not simplify logic for convenience
+- Prefer correctness over cleverness
+
+117. FINAL ACCEPTANCE CONDITION
+
+The project is ACCEPTED as complete only if:
+
+- All parts (1–117) are respected
+- No contradictions exist in implementation
+- Features behave exactly as described
+- The system can be demonstrated end-to-end

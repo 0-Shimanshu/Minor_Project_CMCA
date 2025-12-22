@@ -1,0 +1,7 @@
+/* Auth page styling */
+.form { max-width: 420px; margin: 0 auto; }
+.form label { display: block; margin-top: 10px; }
+.form input { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #e5e7eb; border-radius: 6px; }
+.form button { margin-top: 16px; padding: 10px 14px; background: #1c64f2; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+.form button:hover { background: #1659d1; }
+.error { color: #c0392b; }

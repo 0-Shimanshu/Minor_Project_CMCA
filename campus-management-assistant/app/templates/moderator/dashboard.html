@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-container">
+  <h1 class="page-title">Moderator Dashboard</h1>
+
+  <div class="dashboard-grid">
+
+    <!-- LEFT -->
+    <div class="dashboard-main">
+
+      <!-- QUICK ACTIONS -->
+      <div class="card compact-card">
+        <h2>Quick Actions</h2>
+        <div class="horizontal-actions">
+          <a href="/moderator/notices/create" class="btn btn-secondary btn-sm">Create Notice</a>
+          <a href="/moderator/faq" class="btn btn-secondary btn-sm">FAQs</a>
+        </div>
+      </div>
+
+      <!-- PENDING FAQs -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Pending FAQs</h2>
+        </div>
+        <div class="list-container">
+          {% if pending_faqs %}
+            <ul class="clean-list">
+              {% for f in pending_faqs %}
+                <li>
+                  <strong>{{ f.category }}</strong> — {{ f.question }}
+                  <a href="/moderator/faq/{{ f.id }}/answer" class="btn btn-sm btn-primary">Answer</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="muted">No pending FAQs.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="dashboard-side">
+
+      <!-- MY NOTICES -->
+      <div class="card">
+        <div class="card-header">
+          <h2>My Notices</h2>
+          <a href="/moderator/notices" class="btn btn-secondary btn-sm">View All</a>
+        </div>
+        <div class="list-container">
+          {% if notices %}
+            <ul class="clean-list">
+              {% for n in notices %}
+                <li>
+                  <strong>{{ n.title }}</strong>
+                  <div class="muted small">{{ n.status }}</div>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="muted">No notices created.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

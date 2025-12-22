@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+  <link rel="stylesheet" href="/static/css/chatbot.css">
+  <div class="chat">
+    <div class="chat-window card">
+      <div class="chat-header">
+        <strong>Campus Assistant</strong>
+        <span id="chatStatus" class="status">Checking…</span>
+      </div>
+      <div id="messages" class="messages">
+        {% if query %}
+          <div class="bubble user">{{ query }}</div>
+        {% endif %}
+        {% if answer %}
+          <div class="bubble bot">{{ answer }}</div>
+        {% endif %}
+      </div>
+      <form id="chatForm" method="post" class="input-row">
+        <input id="chatInput" type="text" name="query" value="" placeholder="Type your question…" required class="input">
+        <button id="sendBtn" type="submit" class="btn btn-primary">Send</button>
+      </form>
+    </div>
+    {% if not ok and query %}
+      <div class="flash error" style="margin-top:10px">The chatbot could not answer.</div>
+    {% endif %}
+  </div>
+  <script src="/static/js/chatbot.js"></script>
+{% endblock %}

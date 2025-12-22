@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-container">
+  <h1 class="page-title">FAQs</h1>
+
+  <div class="card">
+    <div class="list-container">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Question</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for f in faqs %}
+          <tr>
+            <td>{{ f.category }}</td>
+            <td>{{ f.question }}</td>
+            <td>{{ f.status }}</td>
+            <td>
+              {% if f.status == 'pending' %}
+                <a href="/moderator/faq/{{ f.id }}/answer" class="btn btn-sm btn-primary">Answer</a>
+              {% else %}
+                <span class="muted">Answered</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

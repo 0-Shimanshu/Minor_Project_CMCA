@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-container">
+  <h1 class="page-title">Website Scraper</h1>
+
+  <!-- ADD NEW SOURCE -->
+  <div class="card form-card">
+    <h2>Add Website to Scrape</h2>
+
+    <form method="post">
+      <label>Website URL</label>
+      <input type="url" name="url" placeholder="https://example.edu" required>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          Add & Scrape
+        </button>
+      </div>
+    </form>
+
+    <p class="muted small">
+      Scraped data is marked as <strong>public</strong> and used by the chatbot.
+    </p>
+  </div>
+
+  <!-- SCRAPED SOURCES -->
+  <div class="card">
+    <h2>Scraped Sources</h2>
+
+    <div class="list-container">
+      {% if sources %}
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th>Status</th>
+              <th>Last Scraped</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in sources %}
+            <tr>
+              <td>{{ s.url }}</td>
+              <td>{{ s.status }}</td>
+              <td>{{ s.last_scraped_at or '-' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="muted">No websites scraped yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- SCRAPE LOGS -->
+  <div class="card">
+    <h2>Scrape Logs</h2>
+
+    <div class="list-container">
+      {% if scrape_logs %}
+        <ul class="clean-list">
+          {% for log in scrape_logs %}
+            <li>
+              <strong>{{ log.url }}</strong>
+              <div class="muted small">{{ log.message }}</div>
+              <div class="muted small">{{ log.created_at }}</div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="muted">No scrape logs available.</p>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

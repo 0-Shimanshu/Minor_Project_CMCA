@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-container">
+  <h1 class="page-title">Notice Detail</h1>
+
+  <div class="card">
+    <h2>{{ notice.title }}</h2>
+    <p class="muted">{{ notice.category }} | {{ notice.visibility }}</p>
+
+    <div class="notice-content">
+      {{ notice.content }}
+    </div>
+
+    {% if notice.files %}
+      <hr>
+      <h3>Attachments</h3>
+      <ul class="clean-list">
+        {% for f in notice.files %}
+          <li>
+            <a href="/files/notice/{{ f.id }}" class="btn btn-sm btn-secondary">Download</a>
+            {{ f.file_name }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

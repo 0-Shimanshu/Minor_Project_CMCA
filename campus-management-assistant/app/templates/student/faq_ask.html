@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+  <link rel="stylesheet" href="/static/css/auth.css">
+  <div class="card" style="max-width:720px;margin:0 auto">
+    <h1>Ask a Question</h1>
+    <p class="muted" style="margin-bottom:12px">Your question goes to moderators/admin. You cannot edit after submission.</p>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <form method="post">
+      <div class="form-group" style="margin-bottom:10px">
+        <label>Question</label>
+        <textarea name="question" required rows="6" class="input" style="width:100%"></textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:10px">
+        <label>Category</label>
+        <input type="text" name="category" required class="input" style="width:100%">
+      </div>
+      <div class="form-group" style="margin-bottom:10px">
+        <label>Target Department</label>
+        <input type="text" name="target_department" class="input" style="width:100%">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+{% endblock %}

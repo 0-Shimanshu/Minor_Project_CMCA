@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-container">
+  <h1 class="page-title">Create Notice</h1>
+
+  <div class="card form-card">
+    <form method="post" enctype="multipart/form-data">
+
+      <label>Title</label>
+      <input type="text" name="title" required>
+
+      <label>Summary</label>
+      <input type="text" name="summary">
+
+      <label>Content</label>
+      <textarea name="content" rows="6" required></textarea>
+
+      <label>Category</label>
+      <select name="category" required>
+        <option value="">Select Category</option>
+        <option value="Academic">Academic</option>
+        <option value="Examination">Examination</option>
+        <option value="Fees">Fees</option>
+        <option value="CDC">CDC</option>
+        <option value="General">General</option>
+      </select>
+
+      <label>Visibility</label>
+      <select name="visibility" required>
+        <option value="public">Public</option>
+        <option value="student">Student</option>
+        <option value="restricted">Restricted</option>
+      </select>
+
+      <label>Target Department</label>
+      <select name="target_department">
+        <option value="">All Departments</option>
+        <option value="CSE">CSE</option>
+        <option value="CS">CS</option>
+        <option value="IT">IT</option>
+        <option value="ECE">ECE</option>
+      </select>
+
+      <label>Target Year</label>
+      <select name="target_year">
+        <option value="">All Years</option>
+        <option value="1">1st Year</option>
+        <option value="2">2nd Year</option>
+        <option value="3">3rd Year</option>
+        <option value="4">4th Year</option>
+      </select>
+
+      <label>Attachment</label>
+      <input type="file" name="file">
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a href="/moderator/notices" class="btn btn-secondary">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

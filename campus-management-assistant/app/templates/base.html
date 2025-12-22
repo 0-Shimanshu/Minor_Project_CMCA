@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Campus Management Assistant</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand">Campus Management Assistant</div>
+        <nav class="nav">
+          {% if current_user.is_authenticated %}
+            {% if current_user.role == 'student' %}
+              <a href="/student/dashboard" class="{% if request.path.startswith('/student/dashboard') %}active{% endif %}">Dashboard</a>
+              <a href="/student/notices" class="{% if request.path.startswith('/student/notices') %}active{% endif %}">Notices</a>
+              <a href="/student/faq" class="{% if request.path.startswith('/student/faq') %}active{% endif %}">FAQs</a>
+              <a href="/student/chatbot" class="{% if request.path.startswith('/student/chatbot') %}active{% endif %}">Chatbot</a>
+              <a href="/auth/logout">Logout</a>
+            {% elif current_user.role == 'moderator' %}
+              <a href="/moderator/dashboard" class="{% if request.path.startswith('/moderator/dashboard') %}active{% endif %}">Dashboard</a>
+              <a href="/moderator/notices" class="{% if request.path.startswith('/moderator/notices') %}active{% endif %}">Notices</a>
+              <a href="/moderator/faq" class="{% if request.path.startswith('/moderator/faq') %}active{% endif %}">FAQs</a>
+              <a href="/auth/logout">Logout</a>
+            {% elif current_user.role == 'admin' %}
+              <a href="/admin/dashboard" class="{% if request.path.startswith('/admin/dashboard') %}active{% endif %}">Dashboard</a>
+              <a href="/admin/users" class="{% if request.path.startswith('/admin/users') %}active{% endif %}">Users</a>
+              <a href="/admin/notices" class="{% if request.path.startswith('/admin/notices') %}active{% endif %}">Notices</a>
+              <a href="/admin/faq" class="{% if request.path.startswith('/admin/faq') %}active{% endif %}">FAQs</a>
+              <a href="/admin/scraper" class="{% if request.path.startswith('/admin/scraper') %}active{% endif %}">Scraper</a>
+              <a href="/admin/logs" class="{% if request.path.startswith('/admin/logs') %}active{% endif %}">Logs</a>
+              <a href="/auth/logout">Logout</a>
+            {% endif %}
+          {% else %}
+            <a href="/auth/login" class="{% if request.path.startswith('/auth/login') %}active{% endif %}">Login</a>
+            <a href="/auth/register" class="{% if request.path.startswith('/auth/register') %}active{% endif %}">Register</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+
+    <main class="container main-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-container" style="margin-bottom:12px">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>&copy; {{ 2025 }} Campus Management Assistant</small>
+      </div>
+    </footer>
+  </body>
+</html>

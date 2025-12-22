@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-container">
+  <h1 class="page-title">Admin Dashboard</h1>
+
+  <div class="dashboard-grid">
+
+    <!-- LEFT COLUMN -->
+    <div class="dashboard-main">
+
+      <!-- QUICK ACTIONS (COMPACT – TOP) -->
+      <div class="card compact-card">
+        <h2>Quick Actions</h2>
+        <div class="horizontal-actions">
+          <a href="/admin/notices" class="btn btn-secondary btn-sm">Notices</a>
+          <a href="/admin/faq" class="btn btn-secondary btn-sm">FAQs</a>
+          <a href="/admin/users" class="btn btn-secondary btn-sm">Users</a>
+        </div>
+      </div>
+
+      <!-- SYSTEM SHORT INFO (COMPACT – TOP) -->
+      <div class="card compact-card">
+        <h2>System Overview</h2>
+        <ul class="inline-list">
+          <li><strong>{{ notices|length }}</strong> Notices</li>
+          <li><strong>{{ faqs|length }}</strong> FAQs</li>
+        </ul>
+      </div>
+
+      <!-- RECENT NOTICES (SCROLLABLE – LOWER) -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Recent Notices</h2>
+        </div>
+
+        <div class="list-container">
+          {% if notices %}
+            <ul class="clean-list">
+              {% for n in notices %}
+                <li>
+                  <strong>{{ n.title }}</strong>
+                  {% if n.summary %}
+                    <div class="muted small">{{ n.summary }}</div>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="muted">No notices published.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="dashboard-side">
+
+      <!-- EMAIL ACTIVITY (COMPACT) -->
+      <div class="card compact-card">
+        <h2>Email Activity</h2>
+        <p class="muted">Recent notifications sent</p>
+      </div>
+
+      <!-- EMAIL LOGS (SCROLLABLE) -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Email Logs</h2>
+          <a href="/admin/logs" class="btn btn-secondary btn-sm">View All</a>
+        </div>
+
+        <div class="list-container">
+          {% if email_logs %}
+            <ul class="clean-list">
+              {% for e in email_logs %}
+                <li>
+                  <strong>Notice #{{ e.notice_id }}</strong>
+                  <div class="muted small">{{ e.subject }}</div>
+                  <div class="muted small">{{ e.sent_at }}</div>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="muted">No email notifications.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

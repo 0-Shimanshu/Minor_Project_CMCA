@@ -1,0 +1,274 @@
+You are GitHub Copilot and you have been given a complete master specification (points 1–117) that defines exactly what system must be built; your responsibility is not to redesign, optimize, or reinterpret it, but to execute it in a controlled, phased manner so that the project is built correctly without regressions or confusion. You must treat the implementation as a pipeline of dependent phases and you are strictly forbidden from skipping phases, merging phases, or generating code from future phases prematurely. First, you must internally read and understand the entire specification without generating any code at all, because this phase exists only to lock context and constraints; once internalized, you begin execution. In the first execution phase, you must only create the project skeleton and environment setup: create the project root directory, create the virtual environment named exactly “venv”, activate it, create the folder and subfolder structure exactly as specified, create empty Python files where required, create requirements.txt with the exact dependencies listed, create .gitignore exactly as defined, and create a minimal README; during this phase you must not write any application logic, routes, models, templates, or services, and once the folder structure exists and dependencies install cleanly, you must stop. In the second phase, you must only implement the Flask bootstrap layer: generate app/init.py using the app factory pattern, app/config.py for configuration and environment loading, app/extensions.py for initializing shared extensions, and run.py as the entry point; no routes, models, services, or templates are allowed yet, and you must validate that the Flask app starts without errors before stopping. In the third phase, you must define the complete database schema using SQLAlchemy models exactly as described in the specification, with no missing or extra tables or fields, no seed data insertion, and no routes or services; you must validate that db.create_all() successfully creates all tables in SQLite, then stop. In the fourth phase, you must implement authentication and user lifecycle features only: student registration with login_id equal to the full enrollment number, hashed password storage, login, logout, session handling, role-based redirection, default admin creation, and user deactivation behavior; once students and admin can log in correctly and role restrictions are enforced, you must stop. In the fifth phase, you must implement only the base UI layer: base.html, global CSS, and role-aware navigation; you must not implement feature pages yet, and you must validate that all pages inherit base.html correctly before stopping. In the sixth phase, you must implement the core functional features of the system: notices and FAQs, including services, routes, and templates, strictly enforcing visibility rules, pending-to-answered FAQ lifecycle, and role permissions; you must validate that guests, students, moderators, and admins each see exactly what they are allowed to see, then stop. In the seventh phase, you must integrate the chatbot system using the Gemini API: implement the chatbot service, chatbot routes, and UI, ensuring that the chatbot receives only authorized stored context from chatbot_documents, never performs database search or uses external knowledge, always responds in the user’s language, and refuses to answer when information is missing; once this behavior is verified, you must stop. In the eighth phase, you must implement the admin-only scraper and PDF ingestion pipeline: scraping web pages, extracting text and PDFs, applying SHA-256 deduplication, logging scrape results, safely handling failures, and ensuring scraped content feeds the chatbot but does not automatically become a notice; once deduplication and logging work correctly, you must stop. In the ninth phase, you must implement the email notification system and system logging: sending emails on notice publication, logging email attempts, logging system errors, and ensuring that email failures never block publishing; validate logs and stop. In the final phase, you must perform full system validation: verify that all roles work, permissions are enforced everywhere, chatbot safety rules hold, no unauthorized access is possible, and the system can be demonstrated end-to-end; if any issue arises, you must fix only the responsible layer without refactoring working code. Throughout execution, you must generate code one phase at a time, prefer correctness over cleverness, never invent features, never simplify constraints, and always stop after each phase for validation before continuing.
+
+
+You are GitHub Copilot.
+
+You have been provided with:
+1) A MASTER SPECIFICATION (points 1–117)
+2) An orchestration paragraph defining phased execution
+
+You MUST now execute the project strictly phase by phase.
+You MUST NOT jump ahead.
+You MUST NOT merge phases.
+You MUST wait after each phase for validation.
+
+This document tells you EXACTLY what to do in each phase.
+PHASE 0 — MACHINE & TOOL PREPARATION (NO CODE)
+sql
+Copy code
+Objective:
+Prepare the development environment correctly before writing any code.
+
+Actions REQUIRED:
+- Use the machine where the final demo will happen (laptop recommended)
+- Install Python 3.10 or 3.11 (verify with python --version)
+- Install VS Code
+- Enable GitHub Copilot extension
+- Ensure internet access for Gemini API calls
+
+Do NOT:
+- Generate any code
+- Create any files
+
+Exit condition:
+Environment is ready and verified.
+PHASE 1 — PROJECT ROOT & VIRTUAL ENVIRONMENT
+Objective:
+Create a clean project skeleton with correct isolation.
+
+Actions REQUIRED:
+1) Create project folder: campus-management-assistant
+2) Inside it, create virtual environment named EXACTLY: venv
+3) Activate the virtual environment
+4) Create empty folder structure exactly as defined in the spec
+5) Create empty Python files where required
+6) Create requirements.txt with EXACT dependencies
+7) Create .gitignore exactly as defined
+8) Create README.md (basic project name only)
+
+You MUST generate:
+- Folder tree
+- Empty files
+- requirements.txt
+- .gitignore
+
+You MUST NOT:
+- Write application logic
+- Write routes
+- Write models
+- Write templates
+
+Validation:
+- Folder structure matches spec
+- venv activates correctly
+- requirements.txt installs without error
+
+STOP AFTER THIS PHASE.
+PHASE 2 — APPLICATION BOOTSTRAP (FLASK CORE)
+
+Objective:
+Make the Flask app start cleanly with zero features.
+
+Actions REQUIRED:
+Generate ONLY the following files:
+- app/__init__.py (app factory)
+- app/config.py (env + SQLite config)
+- app/extensions.py (db + login manager)
+- run.py (app runner)
+
+Rules:
+- No routes
+- No models
+- No services
+- No templates
+
+Validation:
+- Flask app runs
+- No errors in terminal
+- No routes registered
+
+STOP AFTER THIS PHASE.
+PHASE 3 — DATABASE MODELS (FULL SCHEMA)
+
+Objective:
+Define the COMPLETE database schema exactly as specified.
+
+Actions REQUIRED:
+Generate ONLY:
+- app/models/*.py
+
+Rules:
+- Match tables and columns EXACTLY
+- No extra fields
+- No missing fields
+- Use SQLAlchemy relationships correctly
+
+You MUST NOT:
+- Insert sample data
+- Create routes
+- Create services
+
+Validation:
+- db.create_all() runs
+- SQLite database file is created
+- Tables match schema
+
+STOP AFTER THIS PHASE.
+PHASE 4 — AUTHENTICATION & USER LIFECYCLE
+
+Objective:
+Implement login, registration, sessions, and role enforcement.
+
+Actions REQUIRED:
+Generate:
+- auth routes
+- login.html
+- register.html
+- Flask-Login integration
+- Default admin creation
+
+Critical rules:
+- login_id = FULL enrollment number for students
+- Passwords are hashed
+- Role-based redirects enforced
+- Deactivated users cannot log in
+
+Validation:
+- Student can register and log in
+- Admin can log in
+- Role redirects work
+- Invalid login handled gracefully
+
+STOP AFTER THIS PHASE.
+PHASE 5 — BASE UI & NAVIGATION
+
+Objective:
+Create a stable UI foundation.
+
+Actions REQUIRED:
+Generate:
+- base.html
+- CSS files
+- Role-aware navigation logic
+
+You MUST NOT:
+- Implement notices
+- Implement FAQs
+- Implement chatbot
+
+Validation:
+- All pages extend base.html
+- Navigation changes by role
+
+STOP AFTER THIS PHASE.
+PHASE 6 — NOTICES & FAQ CORE FEATURES
+
+Objective:
+Implement notice and FAQ workflows.
+
+Actions REQUIRED:
+Generate:
+- Notice services
+- Notice routes
+- Notice templates
+- FAQ services
+- FAQ routes
+- FAQ templates
+
+Rules:
+- Enforce visibility rules
+- Enforce pending → answered lifecycle
+- Students cannot see pending FAQs
+
+Validation:
+- Guest sees public notices only
+- Students see correct notices
+- FAQ workflow behaves correctly
+
+STOP AFTER THIS PHASE.
+PHASE 7 — CHATBOT SYSTEM (GEMINI)
+diff
+Copy code
+Objective:
+Integrate AI chatbot safely.
+
+Actions REQUIRED:
+Generate:
+- chatbot_service.py
+- chatbot route
+- chatbot templates
+
+Rules:
+- Chatbot reads ONLY chatbot_documents
+- No hallucination
+- Same-language responses
+- No keyword DB search
+
+Validation:
+- Chatbot answers from stored data only
+- Unknown questions are refused
+- Multilingual queries work
+
+STOP AFTER THIS PHASE.
+PHASE 8 — SCRAPER & PDF PIPELINE
+
+Objective:
+Enable admin-controlled scraping and PDF ingestion.
+
+Actions REQUIRED:
+Generate:
+- scraper_service.py
+- scraper routes
+- PDF extraction logic
+- Deduplication logic
+- Scrape logs
+
+Rules:
+- Admin only
+- Deduplicate using SHA-256
+- Failures must not crash app
+
+Validation:
+- Duplicate data skipped
+- Scraped data feeds chatbot
+- Logs are created
+
+STOP AFTER THIS PHASE.
+PHASE 9 — EMAIL & SYSTEM LOGGING
+
+Objective:
+Add observability and notifications.
+
+Actions REQUIRED:
+Generate:
+- email_service.py
+- email_logs
+- system_logs integration
+
+Rules:
+- Email failures do NOT block publishing
+- Logs capture all critical events
+
+Validation:
+- Emails attempt to send
+- Logs record failures and successes
+
+STOP AFTER THIS PHASE.
+PHASE 10 — FINAL VALIDATION & FREEZE
+
+Objective:
+Ensure the system is demo-ready.
+
+Actions REQUIRED:
+Verify:
+- All roles function correctly
+- Permissions are enforced
+- Chatbot safety holds
+- No unauthorized access
+- No crashes
+
+Final Rule:
+If something fails, fix ONLY that layer.
+Do NOT refactor working code.
+
+END OF COPILOT EXECUTION GUIDE

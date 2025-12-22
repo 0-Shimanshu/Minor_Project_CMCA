@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-container">
+  <h1 class="page-title">Edit Notice</h1>
+
+  <div class="card form-card">
+    <form method="post" enctype="multipart/form-data">
+
+      <label>Title</label>
+      <input type="text" name="title" value="{{ notice.title }}" required>
+
+      <label>Summary</label>
+      <input type="text" name="summary" value="{{ notice.summary }}">
+
+      <label>Content</label>
+      <textarea name="content" rows="6" required>{{ notice.content }}</textarea>
+
+      <label>Category</label>
+      <select name="category">
+        <option value="{{ notice.category }}" selected>{{ notice.category }}</option>
+      </select>
+
+      <label>Visibility</label>
+      <select name="visibility">
+        <option value="public" {% if notice.visibility=='public' %}selected{% endif %}>Public</option>
+        <option value="student" {% if notice.visibility=='student' %}selected{% endif %}>Student</option>
+        <option value="restricted" {% if notice.visibility=='restricted' %}selected{% endif %}>Restricted</option>
+      </select>
+
+      <label>Add Attachment</label>
+      <input type="file" name="file">
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="/admin/notices" class="btn btn-secondary">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+
+  {% if notice.files %}
+  <div class="card">
+    <h3>Existing Attachments</h3>
+    <ul class="clean-list">
+      {% for f in notice.files %}
+        <li>{{ f.file_name }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

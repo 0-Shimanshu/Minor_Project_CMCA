@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="/static/css/dashboard.css">
+<div class="card">
+  <h1>Users</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Role</th>
+        <th>Name</th>
+        <th>Login ID</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Year</th>
+        <th>Active</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.role }}</td>
+        <td>{{ u.sign_name }}</td>
+        <td>{{ u.login_id }}</td>
+        <td>{{ u.email or '-' }}</td>
+        <td>{{ u.department or '-' }}</td>
+        <td>{{ u.year or '-' }}</td>
+        <td>{{ 'Yes' if u.is_active else 'No' }}</td>
+        <td>{{ u.created_at.strftime('%Y-%m-%d') if u.created_at else '-' }}</td>
+        <td>
+          {% if u.role != 'admin' %}
+            {% if u.is_active %}
+            <form method="post" action="{{ url_for('admin.user_deactivate', user_id=u.id) }}" style="display:inline-block">
+              <button type="submit">Deactivate</button>
+            </form>
+            {% else %}
+            <form method="post" action="{{ url_for('admin.user_activate', user_id=u.id) }}" style="display:inline-block">
+              <button type="submit">Activate</button>
+            </form>
+            {% endif %}
+            <form method="post" action="{{ url_for('admin.user_delete', user_id=u.id) }}" style="display:inline-block" onsubmit="return confirm('Delete this user?');">
+              <button type="submit">Delete</button>
+            </form>
+          {% else %}
+            -
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
