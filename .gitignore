@@ -1,0 +1,35 @@
+# Root Git ignore
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+campus-management-assistant/venv/
+campus-management-assistant/.venv/
+
+# Environment files
+.env
+*.env
+
+# Node.js
+node_modules/
+
+# OS/Editor junk
+.DS_Store
+Thumbs.db
+Camera Roll/
+
+# App data & local artifacts
+campus-management-assistant/app/database/app.db
+campus-management-assistant/app/uploads/
+
+# Logs
+*.log
+
+# Playwright outputs (if generated)
+playwright-report/
+test-results/

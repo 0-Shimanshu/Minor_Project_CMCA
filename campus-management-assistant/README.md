@@ -1,87 +1,192 @@
-# CAMPUS MANAGEMENT ASSISTANT BOT
+# Campus Management Assistant Chatbot (Agnostic)
 
-## Purpose
+An end‑to‑end, institution‑agnostic campus assistant built on Flask. It provides a chatbot for students, guests, and staff, plus dashboards for admins and moderators to manage notices, FAQs, scraping sources, logs, and users. The app is designed to run out‑of‑the‑box with SQLite and can be branded to any college domain via environment configuration.
 
-Campus management website plus AI chatbot. Provides role-based access, notices, FAQ workflow, file uploads, website scraping (admin), and an AI chatbot that answers ONLY from stored institutional data, with multilingual responses.
+> Status: Chatbot currently runs in static‑knowledge mode (no external APIs). Optional LLM integration can be enabled later.
 
-## Roles
+![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11-blue)
+![Flask](https://img.shields.io/badge/Flask-2.x-lightgrey)
+![Database](https://img.shields.io/badge/SQLite-SQLAlchemy-orange)
+![License](https://img.shields.io/badge/License-Custom-lightblue)
 
-- Admin: full access, manages users/notices/FAQs, scraper and logs.
-- Moderator: created by admin; creates notices and answers FAQs.
-- Student: registers with full enrollment number; views notices, asks FAQs, uses chatbot.
-- Guest: no login; views public notices and uses public chatbot.
+## Highlights
 
-## Technology
+- Chatbot with static knowledge (role‑aware) + optional web scraping
+- Admin/moderator dashboards for notices, FAQs, users, logs
+- Secure auth via Flask‑Login, session enforcement for deactivated users
+- Auto‑created SQLite database and default admin on first boot
+- Email, PDF parsing, and scraping services included
+- Simple asset serving for `frontend/css` and `frontend/js`
 
-- Backend: Flask
-- Python: 3.10 or 3.11 ONLY (3.12 is banned)
-- Database: SQLite with SQLAlchemy
-- Auth: Session-based via Flask-Login (no JWT, no OAuth)
-- Frontend: Jinja2 templates, plain CSS, minimal JS
-- AI: Google Gemini API (no model training)
+## Folder Structure
 
-## Setup
+```
+campus-management-assistant/
+├─ app/
+│  ├─ routes/           # blueprints: api, auth, admin, moderator, student, guest, files, chatbot, scraper
+│  ├─ services/         # business logic: chatbot/email/notice/pdf/scraper/etc.
+│  ├─ models/           # SQLAlchemy models: user, logs, faq, notice*, scraper, chatbot_document
+│  ├─ frontend/         # Jinja templates + static assets
+│  ├─ uploads/          # notices/ and scraped/ files
+│  ├─ database/         # SQLite app.db
+│  ├─ extensions.py     # db, login_manager
+│  ├─ config.py         # loads .env, builds DB path
+│  └─ __init__.py       # create_app(), blueprint registration, bootstrapping
+├─ requirements.txt
+├─ run.py               # entrypoint (dev server)
+├─ scripts/             # utilities/tests helpers
+└─ tests/               # API/route tests and UI tests (Playwright in repo root)
+```
 
-Use Python 3.10 or 3.11 in a virtual environment. Do NOT use Python 3.12, and do NOT use versions lower than 3.10. Configure `.env` and run locally.
+## Architecture
 
-### Quick Start (Windows PowerShell)
+- Flask app created in `app/__init__.py` using `create_app()`
+- Blueprints: `api`, `auth`, `admin`, `moderator`, `student`, `guest`, `files`, `chatbot`, `scraper`
+- Persistence: SQLAlchemy with SQLite at `app/database/app.db`
+- Services: `chatbot_service`, `email_service`, `notice_service`, `pdf_service`, `scraper_service`
+- Models: `user`, `logs`, `faq`, `notice`, `notice_category`, `notice_file`, `scraper`, `chatbot_document`
+
+### Diagram
+
+```mermaid
+flowchart LR
+	Browser[Users: Guest/Student/Admin/Moderator] -->|HTTP| FlaskApp[Flask App]
+	FlaskApp -->|Blueprints| Routes[api, auth, admin, moderator, student, guest, files, chatbot, scraper]
+	Routes --> Services[Services: chatbot/email/notice/pdf/scraper]
+	Services --> Models[Models]
+	Models --> DB[(SQLite app.db)]
+	FlaskApp --> Frontend[Templates + CSS/JS]
+	Services --> Uploads[(uploads/notices, uploads/scraped)]
+	subgraph Config
+		Env[.env]
+		ConfigPy[config.py]
+	end
+	Env --> ConfigPy --> FlaskApp
+```
+
+## Requirements
+
+Python 3.10+ (3.11 recommended). Install from `requirements.txt`:
+
+- Flask, Flask‑SQLAlchemy, Flask‑Login
+- python‑dotenv, requests, beautifulsoup4
+- pdfplumber
+- google‑generativeai (optional; current mode is static knowledge)
+
+## Quick Start
+
+1) Create and activate a virtual environment, then install dependencies:
 
 ```powershell
 # From d:\mn\campus-management-assistant
-python --version
 python -m venv .\venv
 . .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-python .\run.py
 ```
+
+2) Configure environment (create `.env` in the project root):
+
+```
+SECRET_KEY=change_me
+COLLEGE_DOMAIN=example.edu
+ADMIN_LOGIN_ID=admin
+ADMIN_PASSWORD=admin123
+```
+
+3) Run the app:
+
+```powershell
+python .\run.py
+# Server starts on http://127.0.0.1:5000
+```
+
+On first startup, the app ensures the database exists and creates a default admin using `ADMIN_LOGIN_ID`/`ADMIN_PASSWORD`.
+
+## Notable Routes
+
+- `GET /` and role‑specific views via blueprints (`guest`, `student`, `moderator`, `admin`)
+- Chatbot UIs:
+	- `GET /guest/chatbot`, `POST /guest/chatbot`
+	- `POST /student/chatbot` (requires login, student role)
+	- `POST /chatbot/query` (JSON API)
+	- `GET /chatbot/health`
+- Programmatic endpoints under `/api` (see [app/routes/api.py](app/routes/api.py))
+- Assets: `GET /css/<file>`, `GET /js/<file>` served from `frontend/`
 
 ## Environment Variables
 
-- See the full checklist in [campus-management-assistant/docs/env-variables.md](campus-management-assistant/docs/env-variables.md).
-- Required: SECRET_KEY, GEMINI_API_KEY, EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASSWORD, COLLEGE_DOMAIN.
+Set in `.env` at project root:
 
-## Notes
+- SECRET_KEY: session signing key (required)
+- COLLEGE_DOMAIN: domain used for branding and email fallbacks (optional)
+- ADMIN_LOGIN_ID: initial admin login id (optional, default `admin`)
+- ADMIN_PASSWORD: initial admin password (optional, default `admin123`)
 
-- Emails fall back to no-reply@COLLEGE_DOMAIN and include portal links using https://COLLEGE_DOMAIN when provided.
-- Admin credentials can be set via ADMIN_LOGIN_ID and ADMIN_PASSWORD or use defaults (admin / admin123).
+## Usage
 
-## Forbidden Technologies (Non-Goals)
+- First run creates the database and (if missing) a default admin.
+- Login as admin → add moderators/students, manage notices/FAQs, configure scraping sources.
+- Students can ask the chatbot (student visibility); guests can use the guest chatbot (public visibility).
+- Scraper and PDF parsing services help ingest official content for the assistant.
 
-Do not use or introduce:
-- FastAPI, Django, Node.js
-- MongoDB/NoSQL, vector databases
-- LangChain, LlamaIndex, embeddings
-- Transformer training
-- OAuth or social login
-- Docker, microservices
-- Client-side frameworks (React, Angular, Vue)
+## Data & Storage
 
-## Core Design Philosophy
+- Database file: `app/database/app.db` (auto‑created)
+- Uploads: `app/uploads/notices`, `app/uploads/scraped`
 
-- Backend enforces all permissions; frontend never enforces permissions
-- Database controls visibility; AI controls understanding
-- No unspecified features added; none removed
-- Prefer explicit, clear, correct code over magic/optimization
+## Admin & Security
 
-## Chatbot Rules
+- Auth via Flask‑Login; sessions invalidated for deactivated users
+- Default admin is created on boot if none exists
+- Use a strong `SECRET_KEY` in production; change default credentials
 
-- Answers ONLY from provided context (chatbot_documents)
-- If info is missing, say so; do not hallucinate
-- Student: visibility in (public, student); Guest: public only
-- Prompt must instruct: respond in the same language as the user
+## Development Tips
 
-## Multilingual Handling
+- Blueprints are registered in `app/__init__.py`
+- Environment loading via `app/config.py` using `.env`
+- To inspect/alter models, use Flask shell or a SQLite browser
+- UI tests available under the repo’s `tests/ui` (Playwright)
 
-- Do not manually translate or detect language
-- The Gemini model handles language; prompt enforces same-language replies
+Run Python tests:
 
-## Duplicate Data Prevention
+```powershell
+python -m pytest -q
+```
 
-- Normalize text and store SHA-256 content_hash
-- Skip insertion when content_hash exists (no duplicate knowledge)
+Run UI tests (requires Node.js):
 
-## Global Error Handling
+```bash
+npm install
+npx playwright install
+npx playwright test
+```
 
-- Show clear user-facing messages
-- Log critical errors into system_logs
-- Never crash the application on failures
+## Troubleshooting
+
+- If the DB schema evolves, the app attempts lightweight migrations on boot
+- Delete `app/database/app.db` to reset local data (dev only)
+- Check `.env` paths and ensure the virtual environment is active
+
+## Screenshots
+
+Place screenshots under `assets/screenshots/` and they will render here:
+
+![Admin Dashboard](assets/screenshots/admin-dashboard.png)
+![Guest Chatbot](assets/screenshots/guest-chatbot.png)
+![Student Chatbot](assets/screenshots/student-chatbot.png)
+
+## Deployment
+
+- Use a production WSGI server (e.g., Waitress on Windows, Gunicorn on Linux) behind a reverse proxy.
+- Set a strong `SECRET_KEY` and change default admin credentials.
+- Move SQLite to a persistent location or upgrade to a managed RDBMS if needed.
+- Configure logs rotation and health checks (`/chatbot/health`).
+
+## Contributing
+
+- Open issues and PRs with clear descriptions.
+- Keep style consistent; avoid introducing heavy frameworks or breaking agnostic design.
+
+## License
+
+Proprietary or institution‑specific. Adapt as needed for your deployment.
