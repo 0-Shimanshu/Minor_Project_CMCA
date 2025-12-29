@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Public Notices | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/campus-management-assistant/app/frontend/css/guest/notices.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+</div>
+
+<!-- Header -->
+<header class="header">
+    <div class="logo">Campus Management Assistant</div>
+    <nav class="nav-links">
+        <a href="/guest/home.html">Home</a>
+        <a href="/guest/chatbot.html">Home</a>
+        <a href="/auth/login" class="primary-link">Login</a>
+    </nav>
+</header>
+
+<!-- Page Title -->
+<section class="page-title">
+    <h1>Public Notices</h1>
+    <p>
+        Verified campus announcements published by authorized personnel.
+        Browse notices using search and category filters.
+    </p>
+</section>
+
+<!-- Controls -->
+<section class="controls">
+    <input type="text" id="searchInput" placeholder="Search notices...">
+    <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <option value="Academic">Academic</option>
+        <option value="Event">Event</option>
+        <option value="Administration">Administration</option>
+    </select>
+</section>
+
+<!-- Scrollable Notice List -->
+<section class="notice-container"></section>
+
+<!-- Modal -->
+<div class="modal" id="noticeModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeNotice()">×</span>
+        <span class="modal-badge" id="modalTag"></span>
+        <h2 id="modalTitle"></h2>
+        <p class="modal-date" id="modalDate"></p>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<!-- Footer (CONSISTENT ACROSS ALL PAGES) -->
+<footer class="footer">
+    <div class="footer-col">
+        <h4>About the Project</h4>
+        <p>
+            Campus Management Assistant is an academic project designed
+            to provide verified campus information and AI-assisted querying.
+        </p>
+    </div>
+
+    <div class="footer-col">
+        <h4>Official Website</h4>
+        <a href="https://www.exampleuniversity.edu" target="_blank">
+            www.exampleuniversity.edu
+        </a>
+        <p>For academics, admissions, and institutional policies</p>
+    </div>
+
+    <div class="footer-col">
+        <h4>Contact</h4>
+        <p>
+            📧 contact@exampleuniversity.edu<br>
+            ☎ +91-98765-43210
+        </p>
+    </div>
+</footer>
+
+<div class="copyright">
+    © 2025 Campus Management Assistant · Academic Project
+</div>
+
+<script src="/js/guest/notices.js"></script>
+
+</body>
+</html>

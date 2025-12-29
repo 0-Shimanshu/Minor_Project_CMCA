@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, sans-serif;
+}
+
+body {
+    background: #0f1115;
+    color: #e5e7eb;
+}
+
+/* Background */
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+.blob {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    filter: blur(160px);
+    opacity: 0.4;
+}
+.blob1 { background: #22c55e; top: 10%; left: 5%; }
+.blob2 { background: #3b82f6; bottom: 10%; right: 10%; }
+
+/* Layout */
+.dashboard {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    background: #15171c;
+    padding: 20px;
+}
+.sidebar nav a {
+    display: block;
+    padding: 10px;
+    color: #d1d5db;
+    text-decoration: none;
+}
+.sidebar nav a.active {
+    background: #1f2933;
+}
+.logout {
+    margin-top: 20px;
+    color: #fca5a5;
+}
+
+/* Main */
+.main {
+    flex: 1;
+    padding: 20px;
+    overflow: hidden;
+}
+
+/* Header */
+.header {
+    margin-bottom: 16px;
+}
+
+/* Stats */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: #15171c;
+    padding: 16px;
+    border: 1px solid #1f2933;
+}
+
+.stat-card h3 {
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+.stat-card p {
+    font-size: 28px;
+    margin-top: 6px;
+}
+
+.stat-card.highlight button {
+    margin-top: 10px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Content */
+.content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Cards */
+.card {
+    background: #15171c;
+    border: 1px solid #1f2933;
+    padding: 14px;
+    height: calc(100vh - 260px);
+    overflow-y: auto;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.card-header a {
+    font-size: 13px;
+    color: #22c55e;
+    text-decoration: none;
+}
+
+/* Lists */
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #1f2933;
+}
+
+/* Tags */
+.tag {
+    font-size: 12px;
+    padding: 4px 8px;
+}
+
+.tag.academic { background: rgba(59,130,246,.15); color: #3b82f6; }
+.tag.event { background: rgba(34,197,94,.15); color: #22c55e; }
+.tag.placement { background: rgba(245,158,11,.15); color: #f59e0b; }
+
+/* Status */
+.status {
+    font-size: 12px;
+    padding: 4px 8px;
+}
+.status.answered {
+    background: rgba(34,197,94,.15);
+    color: #22c55e;
+}
+.status.pending {
+    background: rgba(245,158,11,.15);
+    color: #f59e0b;
+}
+
+/* Footer */
+.footer {
+    background: rgba(17,18,20,0.95);
+    text-align: center;
+    padding: 14px;
+    font-size: 13px;
+    color: #9ca3af;
+}

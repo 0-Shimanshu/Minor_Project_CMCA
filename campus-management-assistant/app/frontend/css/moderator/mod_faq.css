@@ -1,0 +1,63 @@
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui;}
+body{background:#0f1115;color:#e5e7eb;}
+
+.background{position:fixed;inset:0;z-index:-1;}
+.blob{position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(160px);opacity:.4;}
+.blob1{background:#22c55e;top:10%;left:5%;}
+.blob2{background:#3b82f6;bottom:10%;right:10%;}
+
+.dashboard{display:flex;height:100vh;}
+
+.sidebar{width:230px;background:#15171c;padding:20px;}
+.sidebar nav a{display:block;padding:10px;color:#d1d5db;text-decoration:none;}
+.sidebar nav a.active{background:#1f2933;}
+.logout{margin-top:20px;color:#fca5a5;}
+
+.main{flex:1;padding:20px;overflow:hidden;}
+
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+
+.card{background:#15171c;padding:14px;border:1px solid #1f2933;}
+.faq-list{height:calc(100vh - 160px);overflow-y:auto;}
+
+/* Table layout to match admin look */
+.card table{width:100%;border-collapse:collapse;}
+.card thead tr{color:#22c55e;font-weight:600;border-bottom:1px solid #1f2933;}
+.card thead th,.card tbody td{padding:10px;text-align:left;vertical-align:top;}
+.card tbody tr{border-bottom:1px solid #1f2933;}
+
+.faq-row{
+    display:grid;
+    grid-template-columns:2fr 1fr 2fr;
+    padding:10px 0;
+    border-bottom:1px solid #1f2933;
+}
+
+.header-row{font-weight:600;color:#22c55e;}
+
+.status{
+    font-size:12px;
+    padding:4px 8px;
+}
+.status.pending{background:rgba(245,158,11,.15);color:#f59e0b;}
+.status.answered{background:rgba(34,197,94,.15);color:#22c55e;}
+
+.actions{display:flex;gap:8px;}
+.actions button{white-space:nowrap;min-width:70px;text-align:center;}
+
+.btn-primary{background:linear-gradient(135deg,#22c55e,#16a34a);border:none;padding:8px 14px;}
+.btn-secondary{background:#1f2933;color:#e5e7eb;border:none;padding:8px 14px;}
+.btn-delete{background:#7f1d1d;color:#fecaca;border:none;padding:8px 14px;}
+
+.footer{text-align:center;padding:14px;font-size:13px;color:#9ca3af;}
+
+/* Modal (match notices modal look) */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:999;}
+.modal-box{background:#15171c;padding:20px;width:420px;}
+.modal-box input,
+.modal-box textarea,
+.modal-box select{
+    width:100%;padding:8px;margin:6px 0 14px;
+    background:#0f1115;border:1px solid #1f2933;color:#e5e7eb;
+}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;}

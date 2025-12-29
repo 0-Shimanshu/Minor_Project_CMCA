@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, sans-serif;
+}
+
+body {
+    background: #0f1115;
+    color: #e5e7eb;
+}
+
+/* Background */
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+
+.blob {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    filter: blur(160px);
+    opacity: 0.4;
+}
+
+.blob1 { background: #f59e0b; top: 10%; left: 5%; }
+.blob2 { background: #10b981; bottom: 10%; right: 10%; }
+
+/* Layout */
+.dashboard {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    background: #15171c;
+    padding: 20px;
+}
+
+.sidebar nav a {
+    display: block;
+    padding: 10px;
+    color: #d1d5db;
+    text-decoration: none;
+}
+
+.sidebar nav a.active {
+    background: #1f2933;
+}
+
+.logout {
+    margin-top: 20px;
+    color: #fca5a5;
+}
+
+/* Main */
+.main {
+    flex: 1;
+    padding: 20px;
+    overflow-y: hidden;
+}
+
+/* Header */
+.header {
+    margin-bottom: 14px;
+}
+
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.filter-bar input,
+.filter-bar select {
+    padding: 8px;
+    background: #15171c;
+    border: 1px solid #1f2933;
+    color: #e5e7eb;
+}
+
+/* Card */
+.card {
+    background: #15171c;
+    padding: 14px;
+}
+
+/* Log List */
+.log-list {
+    height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+.log-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 100px 160px;
+    padding: 10px 0;
+    border-bottom: 1px solid #1f2933;
+    align-items: center;
+}
+
+.header-row {
+    font-weight: 600;
+    color: #e5e7eb;
+}
+
+/* Type badges */
+.type {
+    font-weight: 600;
+}
+
+.type.login { color: #38bdf8; }
+.type.notice { color: #f59e0b; }
+.type.faq { color: #22c55e; }
+.type.email { color: #ec4899; }
+.type.scraper { color: #a78bfa; }
+.type.system { color: #9ca3af; }
+
+/* Levels */
+.level.info { color: #10b981; }
+.level.warning { color: #f59e0b; }
+.level.error { color: #ef4444; }
+
+/* Footer */
+.footer {
+    background: rgba(17,18,20,0.95);
+    text-align: center;
+    padding: 14px;
+    font-size: 13px;
+    color: #9ca3af;
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Public Chatbot | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/campus-management-assistant/app/frontend/css/auth/login.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+</div>
+
+<!-- Header -->
+<header class="header">
+    <div class="logo">Campus Management Assistant</div>
+    <nav class="nav-links">
+        <a href="/guest/home.html">Home</a>
+        <a href="/guest/public_notices.html">Notices</a>
+        <a href="/auth/login" class="primary-link">Login</a>
+    </nav>
+</header>
+
+<!-- Page Title -->
+<section class="page-title">
+    <h1>Public AI Assistant</h1>
+    <p>
+        Ask questions related to campus procedures, facilities, and publicly
+        available information. The assistant responds strictly using verified
+        official documents.
+    </p>
+</section>
+
+<!-- Chatbot Wrapper -->
+<section class="chatbot-wrapper">
+
+    <!-- Info Banner -->
+    <div class="chatbot-info">
+        ⚠️ This AI assistant answers questions strictly using official campus
+        documents. If information is not available, the assistant will clearly
+        state that it cannot answer.
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-area" id="chatArea">
+        <div class="message bot">
+            Hello 👋  
+            I’m the Campus Management Assistant.  
+            You can ask me questions about public campus information.
+        </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input">
+        <input
+            type="text"
+            id="userInput"
+            placeholder="Type your question and press Enter..."
+            autocomplete="off"
+        >
+        <button id="sendBtn">Send</button>
+    </div>
+
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-col">
+        <h4>About the Project</h4>
+        <p>
+            Campus Management Assistant is an academic project designed
+            to provide verified campus information and AI-assisted querying.
+        </p>
+    </div>
+
+    <div class="footer-col">
+        <h4>Official Website</h4>
+        <a href="https://www.exampleuniversity.edu" target="_blank">
+            www.exampleuniversity.edu
+        </a>
+        <p>For academics, admissions, and institutional policies</p>
+    </div>
+
+    <div class="footer-col">
+        <h4>Contact</h4>
+        <p>
+            📧 contact@exampleuniversity.edu<br>
+            ☎ +91-98765-43210
+        </p>
+    </div>
+</footer>
+
+<div class="copyright">
+    © 2025 Campus Management Assistant · Academic Project
+</div>
+
+<script src="/js/guest/chatbot.js"></script>
+
+</body>
+</html>

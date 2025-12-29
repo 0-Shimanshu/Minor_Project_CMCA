@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Logs | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/admin/admin_logs.css">
+</head>
+<body>
+
+<!-- Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+</div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <nav>
+            <a href="/admin/dashboard">Dashboard</a>
+            <a href="/admin/users">Users</a>
+            <a href="/admin/notices">Notices</a>
+            <a href="/admin/faq">FAQs</a>
+            <a class="active" href="/admin/logs">Logs</a>
+            <a href="/admin/scraper">Scraper</a>
+            <a class="logout" href="/logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Header -->
+        <header class="header">
+            <h1>System Logs</h1>
+            <p>View system, login, email and scraper logs</p>
+        </header>
+
+        <!-- Filters -->
+        <section class="filter-bar">
+            <input type="text" id="filterQuery" placeholder="Search log message">
+            <select id="filterType">
+                <option value="all">All Types</option>
+                <option value="login">Login</option>
+                <option value="notice">Notice</option>
+                <option value="faq">FAQ</option>
+                <option value="email">Email</option>
+                <option value="scraper">Scraper</option>
+                <option value="system">System</option>
+            </select>
+        </section>
+
+        <!-- Logs List -->
+        <section class="card log-list" id="logList">
+            <div class="log-row header-row">
+                <span>Type</span>
+                <span>Message</span>
+                <span>Level</span>
+                <span>Time</span>
+            </div>
+            <!-- Populated by JS -->
+        </section>
+
+    </main>
+</div>
+
+<footer class="footer">
+    Campus Management Assistant · Admin Panel
+</footer>
+
+<script src="/js/admin/logs.js"></script>
+</body>
+</html>
