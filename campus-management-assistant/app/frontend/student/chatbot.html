@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Chatbot</title>
+    <link rel="stylesheet" href="/css/student/student_chatbot.css?v=20251229">
+</head>
+<body>
+
+<!-- Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+</div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Student</h2>
+        <nav>
+            <a href="/student/dashboard">Dashboard</a>
+            <a href="/student/notices">Notices</a>
+            <a href="/student/faq">FAQs</a>
+            <a class="active" href="/student/chatbot">Chatbot</a>
+            <a class="logout" href="/logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <header class="header">
+            <h1>Campus Assistant</h1>
+            <p>Ask questions about notices, FAQs, and campus information</p>
+        </header>
+
+        <!-- Chat Container -->
+        <section class="chat-container">
+
+            <!-- Messages -->
+            <div class="chat-messages" id="chatMessages"></div>
+
+            <!-- Input -->
+            <div class="chat-input">
+                <textarea
+                    id="chatInput"
+                    rows="1"
+                    placeholder="Type your question and press Enter..."
+                ></textarea>
+                <button id="sendBtn">Send</button>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<footer class="footer">
+    Campus Management Assistant · Student Panel
+</footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/student/chatbot.js"></script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from urllib.parse import urljoin
 import os
 import hashlib
@@ -19,11 +19,11 @@ def _hash_text(text: str) -> str:
     return hashlib.sha256(normalized.encode('utf-8')).hexdigest()
 
 
-def add_website(url: str) -> Tuple[bool, str]:
+def add_website(url: str, name: Optional[str] = None) -> Tuple[bool, str]:
     try:
         if ScrapedWebsite.query.filter_by(url=url).first():
             return False, 'URL already added'
-        site = ScrapedWebsite(url=url)
+        site = ScrapedWebsite(url=url, name=(name or None), enabled=True)
         db.session.add(site)
         db.session.commit()
         return True, 'Added'
@@ -145,6 +145,9 @@ def scrape_all() -> Tuple[int, int]:
     total = 0
     for site in list_websites():
         total += 1
-        s, _ = scrape_website(site)
+        if getattr(site, 'enabled', True):
+            s, _ = scrape_website(site)
+        else:
+            s = False
         ok += 1 if s else 0
     return ok, total

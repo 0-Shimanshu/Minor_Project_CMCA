@@ -1,0 +1,247 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+body {
+    background: #0f1115;
+    color: #e5e7eb;
+}
+
+/* Animated Background */
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+
+.blob {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    filter: blur(160px);
+    opacity: 0.4;
+    animation: float 28s infinite ease-in-out;
+}
+
+.blob1 { background: #f59e0b; top: 10%; left: 10%; }
+.blob2 { background: #10b981; bottom: 15%; right: 15%; }
+.blob3 { background: #ec4899; top: 60%; left: 55%; }
+
+@keyframes float {
+    50% { transform: translate(50px, -40px); }
+}
+
+/* Layout */
+.dashboard {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    background: #15171c;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.student-profile span {
+    display: block;
+    font-size: 12px;
+    color: #9ca3af;
+    margin-bottom: 20px;
+}
+
+.sidebar-nav a {
+    display: block;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    color: #d1d5db;
+    text-decoration: none;
+    border-radius: 0;
+}
+
+.sidebar-nav a.active {
+    background: #1f2933;
+}
+
+.logout {
+    margin-top: auto;
+    color: #fca5a5;
+}
+
+/* Main */
+.main {
+    flex: 1;
+    padding: 20px;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Header */
+.page-header {
+    height: 70px;
+}
+
+.page-header p {
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+/* Filters */
+.filters {
+    height: 50px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.filters select,
+.filters input {
+    background: #15171c;
+    border: 1px solid #1f2933;
+    color: #e5e7eb;
+    padding: 6px;
+}
+
+.filters button {
+    background: none;
+    border: none;
+    color: #e5e7eb;
+    cursor: pointer;
+}
+
+/* Scrollable Notice List */
+.notice-list {
+    height: calc(100vh - 70px - 50px - 40px);
+    background: #15171c;
+    padding: 14px;
+    overflow-y: auto;
+}
+
+/* Notice Item */
+.notice-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid #1f2933;
+}
+
+.notice-item p {
+    flex: 1;
+    font-size: 14px;
+}
+
+/* Tags */
+.tag {
+    min-width: 74px;
+    text-align: center;
+    font-size: 11px;
+    padding: 3px 8px;
+    font-weight: 600;
+    border-radius: 0;
+    color: #111827;
+}
+
+.academic { background: #fde68a; }
+.event { background: #6ee7b7; }
+.admin { background: #fca5a5; }
+
+/* Attachment Icon */
+.attachment {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* View Button */
+.notice-item button {
+    background: #1f2933;
+    border: none;
+    color: #e5e7eb;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.notice-item button:hover {
+    background: #2a3441;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #15171c;
+    width: 600px;
+    max-height: 80vh;
+    padding: 24px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #fca5a5;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.modal-meta {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-bottom: 12px;
+}
+
+.attachments li {
+    margin-top: 6px;
+}
+
+.attachments a {
+    color: #e5e7eb;
+    text-decoration: none;
+}
+
+/* Footer */
+.footer {
+    background: rgba(17,18,20,0.95);
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.footer a {
+    color: #e5e7eb;
+    text-decoration: none;
+}
+
+.footer p {
+    color: #d6d3d1;
+}
+
+.copyright {
+    text-align: center;
+    padding: 12px;
+    background: #0f1115;
+    font-size: 13px;
+    color: #9ca3af;
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/admin/admin_dashboard.css">
+</head>
+
+<body>
+
+    <!-- Animated Background -->
+    <div class="background">
+        <span class="blob blob1"></span>
+        <span class="blob blob2"></span>
+        <span class="blob blob3"></span>
+    </div>
+
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="admin-profile">
+                <strong id="adminName">Admin</strong>
+                <span id="adminId">ID</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="/admin/admin_dashboard.html" class="active">Dashboard</a>
+                <a href="/admin/admin_notices.html">Manage Notices</a>
+                <a href="/admin/admin_faq.html">Manage FAQs</a>
+                <a href="/admin/admin_logs.html">Logs</a>
+                <a href="/admin/scraper">Scraper</a>
+                <a href="/admin/admin_users.html">Users</a>
+                <a href="/logout" class="logout">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+
+            <!-- Header -->
+            <section class="page-header">
+                <h1>Admin Dashboard</h1>
+                <p>System overview and monitoring</p>
+            </section>
+
+            <!-- Stats -->
+            <section class="stats">
+                <div class="stat-card">
+                    <h2></h2>
+                    <p>Total Users</p>
+                </div>
+                <div class="stat-card">
+                    <h2></h2>
+                    <p>Published Notices</p>
+                </div>
+                <div class="stat-card">
+                    <h2></h2>
+                    <p>Answered FAQs</p>
+                </div>
+            </section>
+
+            <!-- Monitoring Panels -->
+            <section class="panels">
+
+                <!-- Published Notices -->
+                <div class="panel">
+                    <h3>Recently Published Notices</h3>
+                    <div class="panel-list"></div>
+                </div>
+
+                <!-- Answered FAQs -->
+                <div class="panel">
+                    <h3>Recently Answered FAQs</h3>
+                    <div class="panel-list"></div>
+                </div>
+
+                <!-- Email Logs -->
+                <div class="panel">
+                    <h3>Recent Email Notifications</h3>
+                    <div class="panel-list"></div>
+                </div>
+
+                <!-- My Notices -->
+                <div class="panel">
+                    <h3>My Recent Notices</h3>
+                    <div class="panel-list" id="myNoticesList"></div>
+                </div>
+
+                <!-- My Answered FAQs -->
+                <div class="panel">
+                    <h3>My Answered FAQs</h3>
+                    <div class="panel-list" id="myFaqsList"></div>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-col">
+            <h4>Admin Panel</h4>
+            <p>Campus Management Assistant</p>
+        </div>
+        <div class="footer-col">
+            <h4>System</h4>
+            <p>Restricted Access</p>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <p>admin-support@example.edu</p>
+        </div>
+    </footer>
+
+    <div class="copyright">
+        © 2025 Campus Management Assistant
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/admin/dashboard.js"></script>
+</body>
+
+</html>

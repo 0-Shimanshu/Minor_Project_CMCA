@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moderator Dashboard | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/moderator/mod_dashboard.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+</div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="profile">
+            <h2 id="modName">Moderator</h2>
+            <span id="modId">ID</span>
+        </div>
+
+        <nav class="nav">
+            <a class="active" href="/moderator/dashboard">Dashboard</a>
+            <a href="/moderator/faq">FAQs</a>
+            <a href="/moderator/notices">Notices</a>
+            <a class="logout" href="/logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Header -->
+        <section class="header">
+            <h1>Dashboard</h1>
+            <p>Overview of your moderation activity</p>
+        </section>
+
+        <!-- Stats -->
+        <section class="stats">
+            <div class="stat">
+                <h2>14</h2>
+                <p>Pending FAQs</p>
+            </div>
+            <div class="stat">
+                <h2>9</h2>
+                <p>FAQs Answered by You</p>
+            </div>
+            <div class="stat">
+                <h2>6</h2>
+                <p>Notices Uploaded by You</p>
+            </div>
+        </section>
+
+        <!-- Lists -->
+        <section class="lists">
+
+            <!-- Pending FAQs -->
+            <div class="list-box">
+                <h3>Recent Pending FAQs</h3>
+                <div class="scroll-list">
+                    <div class="item">Is attendance mandatory for labs?</div>
+                    <div class="item">When will semester results be announced?</div>
+                    <div class="item">Is hostel compulsory for first year?</div>
+
+                    
+                </div>
+            </div>
+
+            <!-- My Notices -->
+            <div class="list-box">
+                <h3>Your Uploaded Notices</h3>
+                <div class="scroll-list">
+                    <div class="item">AI Workshop Announcement</div>
+                    <div class="item">Internal Hackathon Notice</div>
+
+                    
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div>Moderator Panel · Campus Management Assistant</div>
+</footer>
+
+</body>
+<script src="/js/api.js"></script>
+<script src="/js/moderator/dashboard.js"></script>
+</html>

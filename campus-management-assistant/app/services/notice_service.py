@@ -25,6 +25,10 @@ def _hash_text(text: str) -> str:
 def create_notice(author: User, title: str, summary: Optional[str], content: str, category_name: str,
                   visibility: str, target_department: Optional[str], target_year: Optional[int]) -> Tuple[bool, Optional[Notice], str]:
     try:
+        # Normalize frontend visibility value 'targeted' -> backend 'restricted'
+        v = (visibility or '').strip().lower()
+        if v == 'targeted':
+            visibility = 'restricted'
         # Enforce restricted visibility requirements
         if visibility == 'restricted' and (not target_department or not target_year):
             return False, None, 'Restricted requires department and year'
@@ -56,6 +60,11 @@ def create_notice(author: User, title: str, summary: Optional[str], content: str
 
 def update_notice(notice: Notice, **fields) -> Tuple[bool, str]:
     try:
+        # Normalize visibility if present in fields
+        if 'visibility' in fields:
+            vv = str(fields.get('visibility') or '').strip().lower()
+            if vv == 'targeted':
+                fields['visibility'] = 'restricted'
         for k, v in fields.items():
             if hasattr(notice, k):
                 setattr(notice, k, v)
@@ -243,3 +252,40 @@ def todays_student_notices(student: User) -> List[Notice]:
         ((Notice.visibility == 'restricted') & (Notice.target_department == student.department) & (Notice.target_year == student.year))
     ).filter(db.func.date(Notice.created_at) == today)
     return q.order_by(Notice.created_at.desc()).all()
+
+
+# Backward-compatible helper expected by legacy API blueprint
+def get_visible_notices(user: Optional[User], category_id: Optional[int] = None, limit: Optional[int] = None) -> List[Notice]:
+    """Return notices visible to the given user, optionally filtered by category id.
+
+    This provides compatibility for older routes that referenced get_visible_notices.
+    """
+    try:
+        from ..models.notice import Notice  # local import to avoid circular
+        q = Notice.query.filter(Notice.status == 'published')
+        if not user or getattr(user, 'role', '') == 'guest':
+            q = q.filter(Notice.visibility == 'public')
+        else:
+            role = getattr(user, 'role', '')
+            if role == 'student':
+                q = q.filter(
+                    (Notice.visibility == 'public') |
+                    (Notice.visibility == 'student') |
+                    ((Notice.visibility == 'restricted') & (Notice.target_department == user.department) & (Notice.target_year == user.year))
+                )
+            elif role in ['moderator', 'admin']:
+                # Moderators/Admins can view all published notices
+                pass
+        if category_id:
+            q = q.filter(Notice.category_id == int(category_id))
+        q = q.order_by(Notice.created_at.desc())
+        items = q.all()
+        if limit is not None:
+            try:
+                l = int(limit)
+                items = items[:l]
+            except Exception:
+                pass
+        return items
+    except Exception:
+        return []

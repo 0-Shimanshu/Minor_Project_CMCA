@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin FAQs | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/admin/admin_faq.css">
+</head>
+<body>
+
+<!-- Background (UNCHANGED) -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+</div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="admin-profile">
+            <strong>Admin Panel</strong>
+            <span>System Administrator</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/admin/admin_dashboard.html">Dashboard</a>
+            <a href="/admin/admin_notices.html">Manage Notices</a>
+            <a href="/admin/admin_faq.html" class="active">Manage FAQs</a>
+            <a href="/admin/admin_logs.html">Logs</a>
+            <a href="/admin/scraper">Scraper</a>
+            <a href="/admin/admin_users.html">Users</a>
+            <a href="/logout" class="logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Header -->
+        <section class="page-header">
+            <div>
+                <h1>FAQs</h1>
+                <p>Manage and answer frequently asked questions</p>
+            </div>
+            <button class="btn-primary" onclick="openCreateModal()">+ Create FAQ</button>
+        </section>
+
+        <!-- FAQ List -->
+        <section class="faq-list" id="faqList"></section>
+
+    </main>
+</div>
+
+<!-- CREATE FAQ MODAL -->
+<div class="modal" id="createModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('createModal')">×</button>
+        <h2>Create FAQ</h2>
+
+        <textarea placeholder="Enter FAQ question..."></textarea>
+        <textarea placeholder="Enter answer (optional)..."></textarea>
+
+        <div class="modal-actions">
+            <button class="btn-primary">Create FAQ</button>
+        </div>
+    </div>
+</div>
+
+<!-- VIEW FAQ MODAL -->
+<div class="modal" id="viewModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('viewModal')">×</button>
+        <h2>FAQ Detail</h2>
+
+        <p class="modal-question">
+            Is attendance mandatory for all labs?
+        </p>
+
+        <p class="modal-meta">
+            Course: CS · Year: 2
+        </p>
+
+        <p class="modal-answer">
+            This FAQ is currently unanswered.
+        </p>
+    </div>
+</div>
+
+<!-- ANSWER FAQ MODAL -->
+<div class="modal" id="answerModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('answerModal')">×</button>
+        <h2>Answer FAQ</h2>
+
+        <textarea placeholder="Type your answer here..."></textarea>
+
+        <div class="modal-actions">
+            <button class="btn-primary">Submit Answer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-col">
+        <h4>Admin Panel</h4>
+        <p>Campus Management Assistant</p>
+    </div>
+    <div class="footer-col">
+        <h4>System</h4>
+        <p>Restricted Access</p>
+    </div>
+    <div class="footer-col">
+        <h4>Support</h4>
+        <p>admin-support@example.edu</p>
+    </div>
+</footer>
+
+<div class="copyright">
+    © 2025 Campus Management Assistant
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/admin/faq.js"></script>
+
+</body>
+</html>

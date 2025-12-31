@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moderator FAQs | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/admin/admin_faq.css?v=20251229">
+</head>
+<body>
+
+<!-- Background (copied from admin) -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+    </div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="admin-profile">
+            <strong>Moderator Panel</strong>
+            <span>Content Moderator</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/moderator/moderator_dashboard.html">Dashboard</a>
+            <a href="/moderator/moderator_notices.html">Manage Notices</a>
+            <a href="/moderator/moderator_faq.html" class="active">Manage FAQs</a>
+            <a href="/logout" class="logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Header -->
+        <section class="page-header">
+            <div>
+                <h1>FAQs</h1>
+                <p>Manage and answer frequently asked questions</p>
+            </div>
+            <button class="btn-primary" onclick="openCreateModal()">+ Create FAQ</button>
+        </section>
+
+        <!-- FAQ List -->
+        <section class="faq-list" id="faqList"></section>
+
+    </main>
+</div>
+
+<!-- CREATE FAQ MODAL -->
+<div class="modal" id="createModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('createModal')">×</button>
+        <h2>Create FAQ</h2>
+
+        <textarea id="createQuestion" placeholder="Enter FAQ question..."></textarea>
+        <textarea id="createAnswer" placeholder="Enter answer (optional)..."></textarea>
+
+        <div class="modal-actions">
+            <button class="btn-primary" onclick="submitCreateFaq()">Create FAQ</button>
+        </div>
+    </div>
+    </div>
+
+<!-- VIEW FAQ MODAL (optional display) -->
+<div class="modal" id="viewModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('viewModal')">×</button>
+        <h2>FAQ Detail</h2>
+        <p class="modal-question" id="viewQuestion"></p>
+        <p class="modal-meta" id="viewMeta"></p>
+        <p class="modal-answer" id="viewAnswer"></p>
+    </div>
+</div>
+
+<!-- ANSWER FAQ MODAL -->
+<div class="modal" id="answerModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('answerModal')">×</button>
+        <h2>Answer FAQ</h2>
+
+        <textarea id="answerText" placeholder="Type your answer here..."></textarea>
+
+        <div class="modal-actions">
+            <button class="btn-primary" onclick="submitAnswerFaq()">Submit Answer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-col">
+        <h4>Moderator Panel</h4>
+        <p>Campus Management Assistant</p>
+    </div>
+    <div class="footer-col">
+        <h4>System</h4>
+        <p>Restricted Access</p>
+    </div>
+    <div class="footer-col">
+        <h4>Support</h4>
+        <p>moderator-support@example.edu</p>
+    </div>
+</footer>
+
+<div class="copyright">
+    © 2025 Campus Management Assistant
+</div>
+
+<script>
+    function openCreateModal() {
+        const modal = document.getElementById('createModal');
+        if (modal) modal.style.display = 'flex';
+        document.getElementById('createQuestion').value = '';
+        document.getElementById('createAnswer').value = '';
+    }
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'none';
+    }
+
+    function escapeHtml(str){
+        return String(str||'')
+            .replace(/&/g,'&amp;')
+            .replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;')
+            .replace(/\"/g,'&quot;')
+            .replace(/'/g,'&#039;');
+    }
+
+    async function loadFaqs(){
+        const cont = document.getElementById('faqList');
+        if (!cont) return;
+        cont.innerHTML = '';
+        try{
+            const res = await fetch('/api/moderator/faqs');
+            const data = await res.json();
+            const faqs = (data && data.ok && Array.isArray(data.faqs)) ? data.faqs : [];
+            if (faqs.length === 0){
+                const empty = document.createElement('div');
+                empty.className = 'faq-item';
+                empty.innerHTML = '<div class="faq-left"><div class="question">No FAQs found</div></div>';
+                cont.appendChild(empty);
+            } else {
+                faqs.forEach(f => {
+                    const item = document.createElement('div');
+                    item.className = 'faq-item' + ((String(f.status||'').toLowerCase()==='answered')?' answered':' unanswered');
+                    const meta = [];
+                    if (f.category) meta.push(escapeHtml(f.category));
+                    if (f.target_department) meta.push(`Dept: ${escapeHtml(f.target_department)}`);
+                    if (f.target_year!=null) meta.push(`Year: ${escapeHtml(String(f.target_year))}`);
+                    item.innerHTML = `
+                        <div class="faq-left">
+                            <div class="question">${escapeHtml(f.question||'')}</div>
+                            <div class="meta">${meta.join(' · ')}</div>
+                        </div>
+                        <div class="faq-actions">
+                            <button class="btn-primary" data-action="answer" data-id="${f.id}">Answer</button>
+                            <button class="btn-delete" data-action="delete" data-id="${f.id}">Delete</button>
+                        </div>`;
+                    cont.appendChild(item);
+                });
+            }
+
+            cont.querySelectorAll('button[data-action="answer"]').forEach(b=>{
+                b.addEventListener('click',()=> openAnswerModal(b.getAttribute('data-id')));
+            });
+            cont.querySelectorAll('button[data-action="delete"]').forEach(b=>{
+                b.addEventListener('click', async ()=>{
+                    const id = b.getAttribute('data-id');
+                    if (!confirm('Delete this FAQ?')) return;
+                    const r = await fetch(`/api/moderator/faqs/${id}/delete`, { method:'POST' });
+                    const dj = await r.json();
+                    if (dj && dj.ok) loadFaqs(); else alert('Delete failed');
+                });
+            });
+        }catch(_){
+            const err = document.createElement('div');
+            err.className = 'faq-item';
+            err.innerHTML = '<div class="faq-left"><div class="question">Error loading FAQs</div></div>';
+            cont.appendChild(err);
+        }
+    }
+
+    async function submitCreateFaq(){
+        const q = document.getElementById('createQuestion').value.trim();
+        const a = document.getElementById('createAnswer').value.trim();
+        if (!q){ alert('Question is required'); return; }
+        try{
+            const body = { question: q };
+            if (a) body.answer = a;
+            const r = await fetch('/api/moderator/faqs', {
+                method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
+            });
+            const dj = await r.json();
+            if (dj && dj.ok){ closeModal('createModal'); loadFaqs(); } else alert('Create failed');
+        }catch(_){ alert('Create error'); }
+    }
+
+    let answeringId = null;
+    function openAnswerModal(id){
+        answeringId = id;
+        document.getElementById('answerText').value = '';
+        const modal = document.getElementById('answerModal');
+        if (modal) modal.style.display = 'flex';
+    }
+    async function submitAnswerFaq(){
+        const ans = document.getElementById('answerText').value.trim();
+        if (!ans){ alert('Answer is required'); return; }
+        try{
+            const r = await fetch(`/api/moderator/faqs/${answeringId}/answer`, {
+                method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ answer: ans })
+            });
+            const dj = await r.json();
+            if (dj && dj.ok){ closeModal('answerModal'); loadFaqs(); } else alert('Answer failed');
+        }catch(_){ alert('Answer error'); }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadFaqs);
+</script>
+
+</body>
+</html>

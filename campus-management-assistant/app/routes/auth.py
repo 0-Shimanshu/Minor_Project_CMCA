@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, request, redirect, url_for, send_from_directory
 from flask_login import login_user, logout_user
 from ..services.auth_service import register_student, authenticate
 
@@ -7,7 +7,14 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.get('/login')
 def login():
-    return render_template('auth/login.html')
+    # Serve new frontend login page (no Jinja)
+    return send_from_directory('frontend/auth', 'login.html')
+
+
+# Alias routes to match frontend links
+@auth_bp.get('/auth/login')
+def login_alias():
+    return send_from_directory('frontend/auth', 'login.html')
 
 
 @auth_bp.post('/login')
@@ -16,7 +23,8 @@ def login_post():
     password = request.form.get('password', '')
     user, msg = authenticate(login_id, password)
     if not user:
-        return render_template('auth/login.html', error=msg), 401
+        # Keep navigation within new static frontend; redirect with error message
+        return redirect(url_for('auth.login', error=msg))
     login_user(user)
     # Role-based redirects
     if user.role == 'admin':
@@ -31,8 +39,13 @@ def login_post():
 
 @auth_bp.get('/register')
 def register():
-    # Student registration only
-    return render_template('auth/register.html')
+    # Serve new frontend register page (no Jinja)
+    return send_from_directory('frontend/auth', 'register.html')
+
+
+@auth_bp.get('/auth/register')
+def register_alias():
+    return send_from_directory('frontend/auth', 'register.html')
 
 
 @auth_bp.post('/register')
@@ -51,8 +64,10 @@ def register_post():
 
     ok, msg = register_student(sign_name, enrollment_no, department, year or 0, email, password)
     if not ok:
-        return render_template('auth/register.html', error=msg), 400
-    return redirect(url_for('auth.login'))
+        # Keep navigation within new static frontend; redirect with error message
+        return redirect(url_for('auth.register', error=msg))
+    # Hint success to login page
+    return redirect(url_for('auth.login', registered=1))
 
 
 @auth_bp.get('/logout')

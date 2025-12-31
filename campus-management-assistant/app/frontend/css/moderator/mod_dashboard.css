@@ -1,0 +1,155 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+body {
+    background: #0f1115;
+    color: #e5e7eb;
+}
+
+/* Background */
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+
+.blob {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    filter: blur(180px);
+    opacity: 0.4;
+    animation: float 26s infinite ease-in-out;
+}
+
+.blob1 { background: #f59e0b; top: 10%; left: 5%; }
+.blob2 { background: #10b981; bottom: 15%; right: 10%; }
+.blob3 { background: #ec4899; top: 60%; left: 55%; }
+
+@keyframes float {
+    50% { transform: translate(60px, -40px); }
+}
+
+/* Layout */
+.dashboard {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background: #15171c;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile h2 {
+    font-size: 20px;
+}
+
+.profile span {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.nav {
+    margin-top: 20px;
+}
+
+.nav a {
+    display: block;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    text-decoration: none;
+    color: #d1d5db;
+}
+
+.nav a.active {
+    background: #1f2933;
+}
+
+.logout {
+    margin-top: auto;
+    color: #fca5a5;
+}
+
+/* Main */
+.main {
+    flex: 1;
+    padding: 20px;
+    overflow: hidden;
+}
+
+/* Header */
+.header {
+    height: 60px;
+    margin-bottom: 14px;
+}
+
+/* Stats */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.stat {
+    background: #15171c;
+    padding: 16px;
+    border: 1px solid #1f2933;
+}
+
+.stat h2 {
+    font-size: 30px;
+}
+
+/* Lists */
+.lists {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    height: calc(100vh - 60px - 180px);
+}
+
+.list-box {
+    background: #15171c;
+    border: 1px solid #1f2933;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-box h3 {
+    margin-bottom: 8px;
+}
+
+/* Scrollable content */
+.scroll-list {
+    flex: 1;
+    overflow-y: auto;
+    background: #0f1115;
+    padding: 6px;
+}
+
+.item {
+    padding: 6px 0;
+    border-bottom: 1px solid #1f2933;
+    font-size: 14px;
+}
+
+/* Footer */
+.footer {
+    background: rgba(17,18,20,0.95);
+    padding: 16px;
+    text-align: center;
+    font-size: 13px;
+    color: #9ca3af;
+}

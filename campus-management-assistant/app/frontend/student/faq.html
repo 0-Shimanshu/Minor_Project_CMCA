@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student FAQ | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/student/student_faq.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+</div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="student-profile">
+            <strong></strong>
+            <span></span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/student/student_dashboard.html">Dashboard</a>
+            <a href="/student/student_notices.html">Notices</a>
+            <a href="/student/student_faq.html" class="active">FAQ</a>
+            <a href="/student/student_chatbot.html">Chatbot</a>
+            <a href="/logout" class="logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Header -->
+        <section class="page-header">
+            <div>
+                <h1>FAQs</h1>
+                <p>Questions asked by students and answered by the institution</p>
+            </div>
+
+            <button class="ask-btn" onclick="openAskModal()">+ Ask a Question</button>
+        </section>
+
+        <!-- FAQ List -->
+        <section class="faq-list" id="faqList"></section>
+
+    </main>
+</div>
+
+<!-- VIEW FAQ MODAL -->
+<div class="modal" id="viewModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('viewModal')">×</button>
+        <h2 id="viewQuestion"></h2>
+        <p class="status-text" id="viewStatus"></p>
+        <p id="viewAnswer"></p>
+    </div>
+</div>
+
+<!-- ASK FAQ MODAL -->
+<div class="modal" id="askModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('askModal')">×</button>
+        <h2>Ask a Question</h2>
+
+        <textarea id="newQuestion" placeholder="Type your question here..."></textarea>
+        <button class="primary-btn" onclick="submitQuestion()">Submit</button>
+    </div>
+</div>
+
+<!-- EDIT FAQ MODAL -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('editModal')">×</button>
+        <h2>Edit Question</h2>
+
+        <textarea id="editQuestion"></textarea>
+        <button class="primary-btn" onclick="saveEdit()">Save Changes</button>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-col">
+        <h4>About</h4>
+        <p>Campus Management Assistant</p>
+    </div>
+    <div class="footer-col">
+        <h4>Website</h4>
+        <a href="#">www.example.edu</a>
+    </div>
+    <div class="footer-col">
+        <h4>Contact</h4>
+        <p>contact@example.edu</p>
+    </div>
+</footer>
+
+<div class="copyright">
+    © 2025 Campus Management Assistant
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/student/faq.js"></script>
+
+</body>
+</html>

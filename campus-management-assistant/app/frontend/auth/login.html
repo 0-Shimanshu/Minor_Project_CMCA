@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/cred/login.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+</div>
+
+<!-- Header -->
+<header class="header">
+    <div class="logo">Campus Management Assistant</div>
+    <nav class="nav-links">
+        <a href="/guest/home.html">Home</a>
+        <a href="/guest/public_notices.html">Notices</a>
+        <a href="/guest/chatbot">Chatbot</a>
+    </nav>
+</header>
+
+<!-- Login Section -->
+<section class="login-wrapper">
+
+    <div class="login-box">
+        <h1>Login</h1>
+        <p class="subtitle">
+            Sign in using your registered campus credentials.
+        </p>
+
+        <form method="post" action="/login">
+            <label for="email">ID</label>
+            <input
+                type="text"
+                id="email"
+                name="login_id"
+                placeholder="Enter your Enrollment Number"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="login-footer">
+            <p>
+                Don’t have an account?
+                <a href="/auth/register">Register here</a>
+            </p>
+        </div>
+    </div>
+
+</section>
+
+<!-- Footer (CONSISTENT ACROSS ALL PAGES) -->
+<footer class="footer">
+    <div class="footer-col">
+        <h4>About the Project</h4>
+        <p>
+            Campus Management Assistant is an academic project designed
+            to provide verified campus information and AI-assisted querying.
+        </p>
+    </div>
+
+    <div class="footer-col">
+        <h4>Official Website</h4>
+        <a href="https://www.exampleuniversity.edu" target="_blank">
+            www.exampleuniversity.edu
+        </a>
+        <p>For academics, admissions, and institutional policies</p>
+    </div>
+
+    <div class="footer-col">
+        <h4>Contact</h4>
+        <p>
+            📧 contact@exampleuniversity.edu<br>
+            ☎ +91-98765-43210
+        </p>
+    </div>
+</footer>
+
+<div class="copyright">
+    © 2025 Campus Management Assistant · Academic Project
+</div>
+
+<script src="/js/auth/login.js"></script>
+</body>
+</html>

@@ -59,6 +59,12 @@ def authenticate(login_id: str, password: str) -> Tuple[Optional[User], str]:
         return None, 'Login error'
 
 
+# Backward-compatible alias for legacy imports
+def authenticate_user(login_id: str, password: str) -> Tuple[Optional[User], str]:
+    """Alias wrapper to maintain compatibility with routes expecting authenticate_user."""
+    return authenticate(login_id, password)
+
+
 # Admin user management helpers (service-layer only)
 def list_all_users():
     try:

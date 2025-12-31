@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Moderator Notices</title>
+    <link rel="stylesheet" href="/css/admin/admin_notices.css?v=20251229">
+</head>
+
+<body>
+
+    <div class="background">
+        <span class="blob blob1"></span>
+        <span class="blob blob2"></span>
+    </div>
+
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Moderator</h2>
+            <nav>
+                <a href="moderator_dashboard.html">Dashboard</a>
+                <a class="active" href="moderator_notices.html">Notices</a>
+                <a href="moderator_faq.html">FAQs</a>
+                <a class="logout" href="/logout">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+
+            <header class="header">
+                <div>
+                    <h1>Notice Management</h1>
+                    <p>Create and manage notices</p>
+                </div>
+                <button class="btn-primary" onclick="openCreateModal()">
+                    + Create Notice
+                </button>
+            </header>
+
+            <!-- Notice List -->
+            <section class="card notice-list" id="noticeList">
+                <div class="notice-row header-row">
+                    <span>Title</span>
+                    <span>Category</span>
+                    <span>Status</span>
+                    <span>Visibility</span>
+                    <span>Actions</span>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- CREATE NOTICE MODAL -->
+    <div class="modal" id="createModal">
+        <div class="modal-box">
+
+            <h2>Create Notice</h2>
+
+            <label>Title</label>
+            <input type="text" id="c_title" placeholder="Notice title">
+
+            <label>Summary</label>
+            <input type="text" id="c_summary" placeholder="Brief summary">
+
+            <label>Content</label>
+            <textarea id="c_content" rows="4" placeholder="Full content"></textarea>
+
+            <label>Category</label>
+            <select id="c_category">
+                <option value="">Select Category</option>
+                <option value="Academic">Academic</option>
+                <option value="Event">Event</option>
+                <option value="Placement">Placement</option>
+                <option value="Administration">Administration</option>
+            </select>
+
+            <label>Visibility</label>
+            <select id="c_visibility">
+                <option value="public">Public</option>
+                <option value="student">Student Only</option>
+                <option value="restricted">Restricted</option>
+            </select>
+
+            <label>Department (Optional)</label>
+            <select id="c_target_department">
+                <option value="">All Departments</option>
+                <option value="CS">CS</option>
+                <option value="IT">IT</option>
+                <option value="ECE">ECE</option>
+            </select>
+
+            <label>Year (Optional)</label>
+            <select id="c_target_year">
+                <option value="">All Years</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+            </select>
+
+            <label>Attachment (Optional)</label>
+            <input type="file" id="c_file">
+
+            <label>Publish Now</label>
+            <div class="notify-toggle">
+                <input type="checkbox" id="c_publish_now">
+                <span>Publish immediately</span>
+            </div>
+
+            <label>Notify Users by Email</label>
+            <div class="notify-toggle">
+                <input type="checkbox" id="c_notify">
+                <span>Send email notifications</span>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal('createModal')">Cancel</button>
+                <button class="btn-primary" onclick="submitCreate()">Create</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- EDIT NOTICE MODAL -->
+    <div class="modal" id="editModal">
+        <div class="modal-box">
+
+            <h2>Edit Notice</h2>
+
+            <input type="hidden" id="e_id">
+
+            <label>Title</label>
+            <input type="text" id="e_title" placeholder="Notice title">
+
+            <label>Summary</label>
+            <input type="text" id="e_summary" placeholder="Brief summary">
+
+            <label>Content</label>
+            <textarea id="e_content" rows="4" placeholder="Full content"></textarea>
+
+            <label>Visibility</label>
+            <select id="e_visibility">
+                <option value="public">Public</option>
+                <option value="student">Student Only</option>
+                <option value="restricted">Restricted</option>
+            </select>
+
+            <label>Department (Optional)</label>
+            <select id="e_target_department">
+                <option value="">All Departments</option>
+                <option value="CS">CS</option>
+                <option value="IT">IT</option>
+                <option value="ECE">ECE</option>
+            </select>
+
+            <label>Year (Optional)</label>
+            <select id="e_target_year">
+                <option value="">All Years</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+            </select>
+
+            <label>Existing Attachments</label>
+            <div id="e_attachments"
+                style="background:#0f1115;padding:10px;border:1px solid #1f2933;border-radius:4px;max-height:150px;overflow-y:auto;margin-bottom:14px;">
+            </div>
+
+            <label>Add New Attachment</label>
+            <input type="file" id="e_file">
+
+            <div class="modal-actions">
+                <button class="btn-delete" onclick="deleteNoticeFromEdit()">Delete Notice</button>
+                <button class="btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+                <button class="btn-primary" onclick="submitEdit()">Update</button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        Campus Management Assistant · Moderator Panel
+    </footer>
+
+    <script>
+        function openCreateModal() {
+            const modal = document.getElementById('createModal');
+            if (modal) modal.classList.add('show');
+        }
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.remove('show');
+        }
+
+        function escapeHtml(str){
+            return String(str||'')
+                .replace(/&/g,'&amp;')
+                .replace(/</g,'&lt;')
+                .replace(/>/g,'&gt;')
+                .replace(/"/g,'&quot;')
+                .replace(/'/g,'&#039;');
+        }
+
+        async function loadNotices(){
+            const list = document.getElementById('noticeList');
+            if (!list) return;
+            // remove old rows except header
+            list.querySelectorAll('.notice-row:not(.header-row)').forEach(n=>n.remove());
+            try {
+                const res = await fetch('/api/moderator/notices');
+                const data = await res.json();
+                const notices = (data && data.ok && Array.isArray(data.notices)) ? data.notices : [];
+                if (notices.length === 0){
+                    const row = document.createElement('div');
+                    row.className = 'notice-row';
+                    row.innerHTML = '<span>No notices found</span><span></span><span></span><span></span><span></span>';
+                    list.appendChild(row);
+                } else {
+                    notices.forEach(n => {
+                        const row = document.createElement('div');
+                        row.className = 'notice-row';
+                        const status = (n.published || n.is_published) ? 'Published' : (n.status || '—');
+                        const vis = (n.visibility||'').toString();
+                        row.innerHTML = `
+                            <span><strong>${escapeHtml(n.title||'')}</strong></span>
+                            <span>${escapeHtml(n.category||'')}</span>
+                            <span>${escapeHtml(status)}</span>
+                            <span>${escapeHtml(vis)}</span>
+                            <span>
+                                <div class="actions">
+                                    <button class="btn-secondary" data-action="edit" data-id="${n.id}">Edit</button>
+                                    <button class="btn-delete" data-action="delete" data-id="${n.id}">Delete</button>
+                                </div>
+                            </span>`;
+                        list.appendChild(row);
+                    });
+                }
+
+                list.querySelectorAll('button[data-action="edit"]').forEach(b=>{
+                    b.addEventListener('click',()=> openEditModal(b.getAttribute('data-id')));
+                });
+                list.querySelectorAll('button[data-action="delete"]').forEach(b=>{
+                    b.addEventListener('click', async ()=>{
+                        const id = b.getAttribute('data-id');
+                        if (!confirm('Delete this notice?')) return;
+                        const r = await fetch(`/api/moderator/notices/${id}/delete`, { method: 'POST' });
+                        const dj = await r.json();
+                        if (dj && dj.ok) loadNotices(); else alert('Delete failed');
+                    });
+                });
+            } catch(_) {
+                const row = document.createElement('div');
+                row.className = 'notice-row';
+                row.innerHTML = '<span>Error loading notices</span><span></span><span></span><span></span><span></span>';
+                list.appendChild(row);
+            }
+        }
+
+        async function submitCreate(){
+            const fd = new FormData();
+            fd.append('title', document.getElementById('c_title').value.trim());
+            fd.append('summary', document.getElementById('c_summary').value.trim());
+            fd.append('content', document.getElementById('c_content').value.trim());
+            const cat = document.getElementById('c_category').value; if (cat) fd.append('category', cat);
+            const vis = document.getElementById('c_visibility').value; if (vis) fd.append('visibility', vis);
+            const dept = document.getElementById('c_target_department').value; if (dept) fd.append('target_department', dept);
+            const year = document.getElementById('c_target_year').value; if (year) fd.append('target_year', year);
+            const file = document.getElementById('c_file').files[0]; if (file) fd.append('file', file);
+            if (document.getElementById('c_notify').checked) fd.append('notify','1');
+            try{
+                const res = await fetch('/moderator/notices/create', { method:'POST', body: fd });
+                if (res.ok || (res.status>=300 && res.status<400)){
+                    closeModal('createModal');
+                    loadNotices();
+                } else {
+                    alert('Create failed');
+                }
+            }catch(_){ alert('Create error'); }
+        }
+
+        async function openEditModal(id){
+            try{
+                const r = await fetch(`/api/moderator/notices/${id}`);
+                const dj = await r.json();
+                if(dj && dj.ok){
+                    const n = dj.notice;
+                    document.getElementById('e_id').value = id;
+                    document.getElementById('e_title').value = n.title || '';
+                    document.getElementById('e_summary').value = n.summary || '';
+                    document.getElementById('e_content').value = n.content || '';
+                    document.getElementById('e_visibility').value = (n.visibility||'public');
+                    document.getElementById('e_target_department').value = n.target_department || '';
+                    document.getElementById('e_target_year').value = n.target_year ? String(n.target_year) : '';
+                }
+            }catch(_){/* ignore */}
+            const modal = document.getElementById('editModal');
+            if (modal) modal.classList.add('show');
+        }
+
+        async function submitEdit(){
+            const id = document.getElementById('e_id').value;
+            const fd = new FormData();
+            fd.append('title', document.getElementById('e_title').value.trim());
+            fd.append('summary', document.getElementById('e_summary').value.trim());
+            fd.append('content', document.getElementById('e_content').value.trim());
+            fd.append('visibility', document.getElementById('e_visibility').value);
+            const dept = document.getElementById('e_target_department').value; if (dept !== undefined) fd.append('target_department', dept);
+            const year = document.getElementById('e_target_year').value; if (year !== undefined) fd.append('target_year', year);
+            const file = document.getElementById('e_file').files[0]; if (file) fd.append('file', file);
+            try{
+                const res = await fetch(`/moderator/notices/${id}/edit`, { method:'POST', body: fd });
+                if (res.ok || (res.status>=300 && res.status<400)){
+                    closeModal('editModal');
+                    loadNotices();
+                } else {
+                    alert('Update failed');
+                }
+            }catch(_){ alert('Update error'); }
+        }
+
+        async function deleteNoticeFromEdit(){
+            const id = document.getElementById('e_id').value;
+            if (!id) return;
+            if (!confirm('Delete this notice?')) return;
+            const r = await fetch(`/api/moderator/notices/${id}/delete`,{ method:'POST' });
+            const dj = await r.json();
+            if (dj && dj.ok){ closeModal('editModal'); loadNotices(); } else alert('Delete failed');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadNotices);
+    </script>
+
+</body>
+
+</html>

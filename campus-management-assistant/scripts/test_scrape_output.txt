@@ -1,0 +1,3 @@
+URL: https://aitr.ac.in/
+SCRAPE_RESULT: ok=True, status=success
+LAST_LOG: status=success, text_len=8859, pdfs=3, scraped_at=2025-12-22 05:55:06.496540

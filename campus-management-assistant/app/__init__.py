@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_login import current_user, logout_user
 from werkzeug.security import generate_password_hash
 from .config import Config, DB_PATH
@@ -14,22 +14,25 @@ def create_app() -> Flask:
     login_manager.init_app(app)
 
     # Register blueprints
-    from .routes.auth import auth_bp
-    from .routes.guest import guest_bp
-    from .routes.student import student_bp
-    from .routes.moderator import moderator_bp
-    from .routes.admin import admin_bp
-    from .routes.chatbot import chatbot_bp
-    from .routes.scraper import scraper_bp
-    from .routes.files import files_bp
-    app.register_blueprint(auth_bp, url_prefix='/auth')
-    app.register_blueprint(guest_bp)
-    app.register_blueprint(student_bp)
-    app.register_blueprint(moderator_bp)
+    from app.routes.api import api_bp
+    from app.routes.auth import auth_bp
+    from app.routes.admin import admin_bp
+    from app.routes.moderator import moderator_bp
+    from app.routes.student import student_bp
+    from app.routes.guest import guest_bp
+    from app.routes.files import files_bp
+    from app.routes.chatbot import chatbot_bp
+    from app.routes.scraper import scraper_bp
+
+    app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(moderator_bp)
+    app.register_blueprint(student_bp)
+    app.register_blueprint(guest_bp)
+    app.register_blueprint(files_bp)
     app.register_blueprint(chatbot_bp)
     app.register_blueprint(scraper_bp)
-    app.register_blueprint(files_bp)
 
     # On startup: ensure database exists and default admin user is created
     with app.app_context():
@@ -39,6 +42,14 @@ def create_app() -> Flask:
             os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
             # Create all tables if missing
             db.create_all()
+            # Backfill schema changes: add 'enabled' column to scraped_websites if missing
+            try:
+                from sqlalchemy import text
+                db.session.execute(text("ALTER TABLE scraped_websites ADD COLUMN enabled INTEGER DEFAULT 1"))
+                db.session.commit()
+            except Exception:
+                # Column likely exists or dialect doesn't support this; ignore
+                pass
         except Exception:
             pass
         try:
@@ -66,5 +77,13 @@ def create_app() -> Flask:
                 logout_user()
         except Exception:
             pass
+
+    @app.route('/css/<path:filename>')
+    def serve_css(filename):
+        return send_from_directory('frontend/css', filename)
+
+    @app.route('/js/<path:filename>')
+    def serve_js(filename):
+        return send_from_directory('frontend/js', filename)
 
     return app

@@ -1,0 +1,209 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+body {
+    background: #0f1115;
+    color: #e5e7eb;
+}
+
+/* Background */
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+
+.blob {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    filter: blur(160px);
+    opacity: 0.4;
+    animation: float 28s infinite ease-in-out;
+}
+
+.blob1 { background: #f59e0b; top: 10%; left: 10%; }
+.blob2 { background: #10b981; bottom: 15%; right: 15%; }
+.blob3 { background: #ec4899; top: 60%; left: 55%; }
+
+@keyframes float {
+    50% { transform: translate(50px, -40px); }
+}
+
+/* Layout */
+.dashboard {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background: #15171c;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-nav a {
+    display: block;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    color: #d1d5db;
+    text-decoration: none;
+}
+
+.sidebar-nav .active {
+    background: #1f2933;
+}
+
+.logout {
+    margin-top: auto;
+    color: #fca5a5;
+}
+
+/* Main */
+.main {
+    flex: 1;
+    padding: 20px;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+/* FAQ List */
+.faq-list {
+    height: calc(100vh - 70px - 40px);
+    background: #15171c;
+    padding: 14px;
+    overflow-y: auto;
+}
+
+/* FAQ Item */
+.faq-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #1f2933;
+    padding: 12px 0;
+}
+
+.faq-item.unanswered {
+    background: rgba(245,158,11,0.08);
+}
+
+.faq-item.answered {
+    opacity: 0.75;
+}
+
+/* Left */
+.faq-left {
+    max-width: 70%;
+}
+
+.question {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.meta {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+/* Actions (RIGHT) */
+.faq-actions {
+    display: flex;
+    gap: 8px;
+}
+.faq-actions .btn-primary,
+.faq-actions .btn-secondary,
+.faq-actions .btn-delete { white-space: nowrap; min-width: 70px; text-align: center; }
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background: #1f2933;
+    color: #e5e7eb;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.btn-delete {
+    background: #7f1d1d;
+    color: #fecaca;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background: #15171c;
+    width: 520px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-content textarea {
+    background: #0f1115;
+    border: 1px solid #1f2933;
+    color: #e5e7eb;
+    padding: 8px;
+    min-height: 100px;
+}
+
+.close-btn {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    color: #fca5a5;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Footer */
+.footer {
+    background: rgba(17,18,20,0.95);
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.copyright {
+    text-align: center;
+    padding: 10px;
+    background: #0f1115;
+    color: #9ca3af;
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Scraper | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/admin/admin_scraper.css">
+</head>
+<body>
+
+<!-- Background (LOCKED) -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+</div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="admin-profile">
+            <strong>Admin Panel</strong>
+            <span>System Administrator</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/admin/admin_dashboard.html">Dashboard</a>
+            <a href="/admin/admin_notices.html">Manage Notices</a>
+            <a href="/admin/admin_faq.html">Manage FAQs</a>
+            <a href="/admin/admin_logs.html">Logs</a>
+            <a href="/admin/scraper" class="active">Scraper</a>
+            <a href="/admin/admin_users.html">Users</a>
+            <a href="/logout" class="logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Header -->
+        <section class="page-header">
+            <div>
+                <h1>Scraper Management</h1>
+                <p>Configure, run and review automated scraping sources</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span id="scrapeIndicator" style="display:none;color:#9ca3af;font-size:14px;">Running…</span>
+                <button class="btn-primary" id="btnRunAllTop" onclick="window.runAllScrapers && window.runAllScrapers()">Run All</button>
+                <button class="btn-primary" onclick="openAddModal()">+ Add Source</button>
+            </div>
+        </section>
+
+        <!-- Scraper Sources -->
+        <section class="scraper-list"></section>
+
+    </main>
+</div>
+
+<!-- ADD / EDIT SOURCE MODAL -->
+<div class="modal" id="addModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('addModal')">×</button>
+        <h2>Add Scraper Source</h2>
+
+        <input type="text" id="sourceName" placeholder="Source Name">
+        <input type="text" id="sourceUrl" placeholder="Source URL">
+
+        <div class="modal-actions">
+            <button class="btn-primary">Save Source</button>
+        </div>
+    </div>
+</div>
+
+<!-- PREVIEW MODAL (populated by JS as needed) -->
+<div class="modal" id="previewModal">
+    <div class="modal-content large">
+        <button class="close-btn" onclick="closeModal('previewModal')">×</button>
+        <h2>Scraped Data Preview</h2>
+        <div id="previewContainer"></div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-col">
+        <h4>Admin Panel</h4>
+        <p>Campus Management Assistant</p>
+    </div>
+    <div class="footer-col">
+        <h4>System</h4>
+        <p>Restricted Access</p>
+    </div>
+    <div class="footer-col">
+        <h4>Support</h4>
+        <p>admin-support@example.edu</p>
+    </div>
+</footer>
+
+<div class="copyright">
+    © 2025 Campus Management Assistant
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/admin/scraper.js"></script>
+
+</body>
+</html>

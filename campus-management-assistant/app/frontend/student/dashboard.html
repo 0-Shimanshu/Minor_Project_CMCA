@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="/css/student/student_dashboard.css">
+</head>
+<body>
+
+<!-- Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+</div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Student</h2>
+        <nav>
+            <a class="active" href="/student/dashboard">Dashboard</a>
+            <a href="/student/notices">Notices</a>
+            <a href="/student/faq">FAQs</a>
+            <a href="/student/chatbot">Chatbot</a>
+            <a class="logout" href="/logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Header -->
+        <header class="header">
+            <div>
+                <h1>Welcome, Student 👋</h1>
+                <p>Your academic overview and quick access</p>
+            </div>
+        </header>
+
+        <!-- Top Cards -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <h3>Active Notices</h3>
+                <p id="noticeCount">12</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>FAQs Asked</h3>
+                <p id="faqCount">4</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Pending FAQs</h3>
+                <p id="pendingFaq">2</p>
+            </div>
+
+            <div class="stat-card highlight">
+                <h3>Ask Assistant</h3>
+                <button onclick="location.href='/student/chatbot'">
+                    Open Chatbot
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Content Sections -->
+        <section class="content">
+
+            <!-- Recent Notices -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Notices</h2>
+                    <a href="/student/notices">View all</a>
+                </div>
+
+                <div id="recentNotices" class="list"></div>
+            </div>
+
+            <!-- My FAQs -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>My FAQs</h2>
+                    <a href="/student/faq">View all</a>
+                </div>
+
+                <div id="myQuestions" class="list"></div>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<footer class="footer">
+    Campus Management Assistant · Student Panel
+</footer>
+
+    <script src="/js/student/dashboard.js"></script>
+</body>
+</html>

@@ -6,8 +6,10 @@ class ScrapedWebsite(db.Model):
     __tablename__ = 'scraped_websites'
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
     url = db.Column(db.String, unique=True, nullable=False)
     added_at = db.Column(db.DateTime, default=datetime.utcnow)
+    enabled = db.Column(db.Boolean, default=True)
 
 
 class ScrapeLog(db.Model):

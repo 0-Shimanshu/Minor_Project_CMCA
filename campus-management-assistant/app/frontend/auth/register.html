@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Registration | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/cred/register.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+</div>
+
+<!-- Header -->
+<header class="header">
+    <div class="logo">Campus Management Assistant</div>
+    <nav class="nav-links">
+        <a href="/guest/home.html">Home</a>
+        <a href="/guest/public_notices.html">Notices</a>
+        <a href="/guest/chatbot">Chatbot</a>
+        <a href="/auth/login">Login</a>
+    </nav>
+</header>
+
+<!-- Register Section -->
+<section class="register-wrapper">
+
+    <div class="register-box">
+        <h1>Student Registration</h1>
+        <p class="subtitle">
+            Register using your official college details.
+            This portal is strictly for students.
+        </p>
+
+        <form method="post" action="/register">
+
+            <label for="name">Full Name</label>
+            <input
+                type="text"
+                id="name"
+                name="sign_name"
+                placeholder="Enter your full name"
+                required
+            >
+
+            <label for="email">College Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="example@acropolis.in"
+                required
+            >
+
+            <label for="enrollment">Enrollment Number</label>
+            <input
+                type="text"
+                id="enrollment"
+                name="enrollment_no"
+                placeholder="Enter your enrollment number"
+                required
+            >
+
+            <label for="course">Course</label>
+            <select id="course" name="department" required>
+                <option value="">Select course</option>
+                <option value="btech_cse">B.Tech – Computer Science</option>
+                <option value="btech_it">B.Tech – Information Technology</option>
+                <option value="btech_ece">B.Tech – Electronics & Communication</option>
+                <option value="btech_eee">B.Tech – Electrical Engineering</option>
+                <option value="btech_me">B.Tech – Mechanical Engineering</option>
+                <option value="bsc_cs">B.Sc – Computer Science</option>
+                <option value="bca">BCA</option>
+                <option value="mca">MCA</option>
+            </select>
+
+            <label for="year">Current Year</label>
+            <select id="year" name="year" required>
+                <option value="">Select year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+            </select>
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Create a password"
+                required
+            >
+
+            <label for="confirm">Confirm Password</label>
+            <input
+                type="password"
+                id="confirm"
+                name="confirm"
+                placeholder="Re-enter your password"
+                required
+            >
+
+            <button type="submit">Register</button>
+        </form>
+
+        <div class="register-footer">
+            <p>
+                Already registered?
+                <a href="/auth/login">Login here</a>
+            </p>
+        </div>
+    </div>
+
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-col">
+        <h4>About the Project</h4>
+        <p>
+            Campus Management Assistant is an academic project designed
+            to provide verified campus information and AI-assisted querying.
+        </p>
+    </div>
+
+    <div class="footer-col">
+        <h4>Official Website</h4>
+        <a href="https://www.exampleuniversity.edu" target="_blank">
+            www.exampleuniversity.edu
+        </a>
+        <p>For academics, admissions, and institutional policies</p>
+    </div>
+
+    <div class="footer-col">
+        <h4>Contact</h4>
+        <p>
+            📧 contact@exampleuniversity.edu<br>
+            ☎ +91-98765-43210
+        </p>
+    </div>
+</footer>
+
+<div class="copyright">
+    © 2025 Campus Management Assistant · Academic Project
+</div>
+
+<script src="/js/auth/register.js"></script>
+</body>
+</html>

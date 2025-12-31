@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Notices | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/student/student_notice.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+</div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="student-profile">
+            <strong></strong>
+            <span></span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/student/dashboard">Dashboard</a>
+            <a href="/student/notices" class="active">Notices</a>
+            <a href="/student/chatbot">Chatbot</a>
+            <a href="/student/faq">My Questions</a>
+            <a href="/logout" class="logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Header -->
+        <section class="page-header">
+            <h1>Notices</h1>
+            <p>Official notices published for students</p>
+        </section>
+
+        <!-- Filters -->
+        <section class="filters">
+            <select>
+                <option>All Categories</option>
+                <option>Academic</option>
+                <option>Event</option>
+                <option>Administration</option>
+            </select>
+            <input type="date">
+            <button>Apply</button>
+        </section>
+
+        <!-- Confined Scroll Area -->
+        <section class="notice-list">
+            <!-- Items will be rendered by JS from /api/student/notices -->
+        </section>
+
+    </main>
+</div>
+
+<!-- Notice Detail Popup -->
+<div class="modal" id="noticeModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeNotice()">×</button>
+
+        <h2></h2>
+        <p class="modal-meta"></p>
+        <p></p>
+        <h4>Attachments</h4>
+        <ul class="attachments"></ul>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-col">
+        <h4>About the Project</h4>
+        <p>Campus Management Assistant is an academic project.</p>
+    </div>
+
+    <div class="footer-col">
+        <h4>Official Website</h4>
+        <a href="#">www.example.edu</a>
+    </div>
+
+    <div class="footer-col">
+        <h4>Contact</h4>
+        <p>contact@example.edu</p>
+    </div>
+</footer>
+
+<div class="copyright">
+    © 2025 Campus Management Assistant
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/student/notices.js"></script>
+<script>
+function closeNotice() { document.getElementById('noticeModal').style.display = 'none'; }
+</script>
+
+</body>
+</html>

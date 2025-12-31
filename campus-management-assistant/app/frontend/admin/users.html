@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Users | Campus Management Assistant</title>
+    <link rel="stylesheet" href="/css/admin/admin_users.css">
+</head>
+<body>
+
+<!-- Background -->
+<div class="background">
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <!-- Keep two blobs for this page per original design -->
+    <!-- FAQ/other pages may include blob3; not needed here -->
+    
+</div>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <nav>
+            <a href="/admin/dashboard">Dashboard</a>
+            <a class="active" href="/admin/users">Users</a>
+            <a href="/admin/notices">Notices</a>
+            <a href="/admin/faq">FAQs</a>
+            <a href="/admin/logs">Logs</a>
+            <a href="/admin/scraper">Scraper</a>
+            <a class="logout" href="/logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Header -->
+        <header class="header">
+            <div>
+                <h1>User Management</h1>
+                <p>Manage users and moderators</p>
+            </div>
+            <button class="btn-primary" id="openAddModerator">+ Add Moderator</button>
+        </header>
+
+        <!-- Search & Filter -->
+        <section class="filter-bar">
+            <input type="text" id="filterUserId" placeholder="Search by User ID">
+            <select id="filterRole">
+                <option value="all">All Roles</option>
+                <option value="student">Student</option>
+                <option value="moderator">Moderator</option>
+            </select>
+        </section>
+
+        <!-- User List -->
+        <section class="card list" id="userList">
+            <div class="user-row header-row">
+                <span>Login ID</span>
+                <span>Role</span>
+                <span>Status</span>
+                <span>Actions</span>
+            </div>
+
+            <!-- Admin self (shown first) -->
+            <div class="user-row disabled">
+                <span>ADMIN</span>
+                <span>Admin</span>
+                <span class="status active">Active</span>
+                <span class="self">Self</span>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Add Moderator Modal -->
+<div class="modal" id="addModeratorModal">
+    <div class="modal-box">
+        <h2>Add Moderator</h2>
+
+        <label>Moderator Login ID</label>
+        <input type="text" id="modLoginId" placeholder="MOD002">
+
+        <label>Name</label>
+        <input type="text" id="modName" placeholder="Full name">
+
+        <label>Password</label>
+        <input type="password" id="modPassword" placeholder="Password">
+
+        <div class="modal-actions">
+            <button class="btn-secondary" id="closeAddModerator">Cancel</button>
+            <button class="btn-primary" id="createModerator">Create</button>
+        </div>
+    </div>
+    
+</div>
+
+<footer class="footer">
+    Campus Management Assistant · Admin Panel
+</footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/admin/users.js"></script>
+
+</body>
+</html>
